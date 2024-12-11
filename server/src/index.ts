@@ -1,9 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import cookieParser from "cookie-parser";
-import bodyParser from "body-parser";
 import connectDB from "./config/db";
+import { globalErrorHandler } from "./middlewares/globalErrorHandler";
+import authRoutes from "./routes/authRoutes";
 
 dotenv.config();
 
@@ -15,9 +15,11 @@ app.get("/", (_req, res) => {
   res.send("Hello world!");
 });
 
-app.use(bodyParser.json());
-app.use(cookieParser());
 app.use(cors());
+
+app.use("/api/auth", authRoutes);
+
+app.use(globalErrorHandler);
 
 connectDB();
 

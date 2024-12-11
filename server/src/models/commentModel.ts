@@ -1,4 +1,3 @@
-import { text } from "body-parser";
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IComment extends Document {

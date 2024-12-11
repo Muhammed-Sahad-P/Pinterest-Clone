@@ -21,7 +21,13 @@ export const globalErrorHandler = (
   res: Response,
   _next: NextFunction
 ) => {
-  if (process.env.NODE_ENV === "development") console.log(error);
+  console.log(`
+    🔴 ERROR OCCURRED:
+    - Status: ${error?.status || "fail"}
+    - Code: ${error?.statusCode || 500}
+    - Message: ${error?.message || "Internal Server Error"}
+    - Stack: ${error?.stack || "No stack available"}
+  `);
 
   if (error instanceof CustomError) {
     errorResponse(error, res);
