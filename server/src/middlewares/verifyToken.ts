@@ -14,12 +14,19 @@ export const verifyToken = async (
     if (!token) {
       throw new CustomError("Not authenticated", 401);
     }
-    const verified = jwt.verify(token, process.env.JWT_SECRET_KEY || "");
-    req.user = verified as JwtDecoded;
-    const userExists = await userModel.findById(req.user.id);
+
+    const verified = jwt.verify(
+      token,
+      process.env.JWT_SECRET_KEY!
+    ) as JwtDecoded;
+
+    const userExists = await userModel.findById(verified.id);
     if (!userExists) {
       throw new CustomError("User not found or blocked", 404);
     }
+
+    req.user = { id: userExists.id, username: userExists.username };
+
     next();
   } catch (error) {
     next(error);
