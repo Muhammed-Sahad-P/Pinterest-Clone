@@ -16,16 +16,16 @@ export const LoginSchema = z.object({
 export const PinSchema = z.object({
   imageUrl: z.string().url("Invalid URL"),
   description: z.string().optional(),
-  boardId: z.string().min(24, "Invalid board ID"),
-  createdBy: z.string().min(24, "Invalid user ID"),
+  boardId: z.string().min(24, "Invalid board ID").optional(),
+  createdBy: z.string().min(24, "Invalid user ID").optional(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });
 
 export const BoardSchema = z.object({
   name: z.string().min(3, "Board name must be at least 3 characters long"),
-  pins: z.array(z.string().min(24, "Invalid pin ID")).optional(),
-  createdBy: z.string().min(24, "Invalid user ID"),
+  description: z.string().optional(),
+  createdBy: z.string().min(24, "Invalid user ID").optional(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });
