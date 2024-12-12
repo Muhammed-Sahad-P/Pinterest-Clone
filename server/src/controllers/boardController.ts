@@ -29,7 +29,8 @@ const addPinToBoard = async (req: CustomRequest, res: Response) => {
   const { boardId } = req.params;
   const { imageUrl, description } = PinSchema.parse(req.body);
 
-  const board = await pinModel.findById(boardId);
+  const board = await boardModel.findById(boardId);
+  console.log(boardId);
 
   if (!board) {
     throw new CustomError("Board not found", 404);
