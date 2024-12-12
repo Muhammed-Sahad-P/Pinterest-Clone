@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface IPin extends Document {
   imageUrl: string;
   description?: string;
+  likeCount: number;
   boardId: mongoose.Types.ObjectId;
   createdBy: mongoose.Types.ObjectId;
 }
@@ -21,6 +22,7 @@ const PinSchema: Schema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    likeCount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

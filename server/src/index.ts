@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes";
 import boardRoutes from "./routes/boardRoutes";
 import pinRoutes from "./routes/pinRoutes";
 import commentRoutes from "./routes/commentRoutes";
+import likeRoutes from "./routes/likeRoutes";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/pins", pinRoutes);
 app.use("/api/boards", boardRoutes);
 app.use("/api/comments", commentRoutes);
+app.use("/api/pins/like", likeRoutes);
 
 app.use(globalErrorHandler);
 
