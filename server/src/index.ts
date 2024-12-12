@@ -6,6 +6,7 @@ import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import authRoutes from "./routes/authRoutes";
 import boardRoutes from "./routes/boardRoutes";
 import pinRoutes from "./routes/pinRoutes";
+import commentRoutes from "./routes/commentRoutes";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use(cors());
 app.use("/api/auth", authRoutes);
 app.use("/api/pins", pinRoutes);
 app.use("/api/boards", boardRoutes);
+app.use("/api/comments", commentRoutes);
 
 app.use(globalErrorHandler);
 
