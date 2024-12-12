@@ -4,10 +4,7 @@ import { BoardSchema, PinSchema } from "../utils/zodSchemas";
 import { CustomError } from "../utils/error/customError";
 import { StandardResponse } from "../utils/standardResponse";
 import pinModel from "../models/pinModel";
-
-interface CustomRequest extends Request {
-  user?: { id: string };
-}
+import { CustomRequest } from "../types/interfaces";
 
 //create board
 const createBoard = async (req: CustomRequest, res: Response) => {

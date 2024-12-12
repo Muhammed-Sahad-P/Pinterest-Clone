@@ -4,10 +4,7 @@ import boardModel from "../models/boardModel";
 import { PinSchema } from "../utils/zodSchemas";
 import { CustomError } from "../utils/error/customError";
 import { StandardResponse } from "../utils/standardResponse";
-
-interface CustomRequest extends Request {
-  user?: { id: string };
-}
+import { CustomRequest } from "../types/interfaces";
 
 // Create pin
 const createPin = async (req: CustomRequest, res: Response) => {
