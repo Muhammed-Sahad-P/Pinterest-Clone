@@ -58,7 +58,7 @@ const deleteCategory = async (req: CustomRequest, res: Response) => {
 
   res
     .status(200)
-    .json(new StandardResponse("Category deleted successfully", {}));
+    .json(new StandardResponse("Category deleted successfully", null));
 };
 
 export { createCategory, updateCategory, deleteCategory };
