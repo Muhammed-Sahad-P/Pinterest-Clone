@@ -1,6 +1,5 @@
 import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
 import { CustomError } from "../../utils/error/customError";
 import { StandardResponse } from "../../utils/standardResponse";
 
@@ -14,8 +13,7 @@ export const adminLogin = async (req: Request, res: Response) => {
     throw new CustomError("Admin not found", 400);
   }
 
-  const isPasswordCorrect = await bcrypt.compare(password, ADMIN_PASSWORD);
-  if (!isPasswordCorrect) {
+  if (password !== ADMIN_PASSWORD) {
     throw new CustomError("Invalid admin credentials", 400);
   }
 

@@ -13,6 +13,7 @@ import userRoutes from "./routes/userRoutes";
 import followRoutes from "./routes/followRoutes";
 import categoryRoutes from "./routes/categoryRoutes";
 import searchRoutes from "./routes/searchRoutes";
+import adminRoutes from "./routes/admin/adminRoutes";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.get("/", (_req, res) => {
 
 app.use(cors());
 
+app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/pins", pinRoutes);
 app.use("/api/boards", boardRoutes);

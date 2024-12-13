@@ -10,4 +10,5 @@ export interface CustomRequest extends Request {
 export interface JwtDecoded {
   id: string;
   username: string;
+  role: "user" | "admin";
 }
