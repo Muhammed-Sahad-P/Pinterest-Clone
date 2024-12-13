@@ -12,6 +12,7 @@ import saveRoutes from "./routes/saveRoutes";
 import userRoutes from "./routes/userRoutes";
 import followRoutes from "./routes/followRoutes";
 import categoryRoutes from "./routes/categoryRoutes";
+import searchRoutes from "./routes/searchRoutes";
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use("/api/pins/save", saveRoutes);
 app.use("/api/profile", userRoutes);
 app.use("/api/users", followRoutes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/search", searchRoutes);
 
 app.use(globalErrorHandler);
 
