@@ -9,6 +9,7 @@ import pinRoutes from "./routes/pinRoutes";
 import commentRoutes from "./routes/commentRoutes";
 import likeRoutes from "./routes/likeRoutes";
 import saveRoutes from "./routes/saveRoutes";
+import userRoutes from "./routes/userRoutes";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use("/api/boards", boardRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/pins/like", likeRoutes);
 app.use("/api/pins/save", saveRoutes);
+app.use("/api/profile", userRoutes);
 
 app.use(globalErrorHandler);
 
