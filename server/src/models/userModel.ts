@@ -8,6 +8,7 @@ export interface IUser extends Document {
   boards?: mongoose.Types.ObjectId[];
   followers?: mongoose.Types.ObjectId[];
   following?: mongoose.Types.ObjectId[];
+  isBlocked?: boolean;
 }
 
 const UserSchema: Schema = new mongoose.Schema(
@@ -27,6 +28,7 @@ const UserSchema: Schema = new mongoose.Schema(
       ref: "User",
       default: [],
     },
+    isBlocked: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
