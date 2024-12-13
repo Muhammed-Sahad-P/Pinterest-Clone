@@ -10,6 +10,7 @@ import commentRoutes from "./routes/commentRoutes";
 import likeRoutes from "./routes/likeRoutes";
 import saveRoutes from "./routes/saveRoutes";
 import userRoutes from "./routes/userRoutes";
+import followRoutes from "./routes/followRoutes";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/pins/like", likeRoutes);
 app.use("/api/pins/save", saveRoutes);
 app.use("/api/profile", userRoutes);
+app.use("/api/users", followRoutes);
 
 app.use(globalErrorHandler);
 

@@ -6,6 +6,8 @@ export interface IUser extends Document {
   password: string;
   profilePicture?: string;
   boards?: mongoose.Types.ObjectId[];
+  followers?: mongoose.Types.ObjectId[];
+  following?: mongoose.Types.ObjectId[];
 }
 
 const UserSchema: Schema = new mongoose.Schema(
@@ -15,6 +17,16 @@ const UserSchema: Schema = new mongoose.Schema(
     password: { type: String, required: true },
     profilePicture: { type: String },
     boards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Board" }],
+    following: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "User",
+      default: [],
+    },
+    followers: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "User",
+      default: [],
+    },
   },
   { timestamps: true }
 );
