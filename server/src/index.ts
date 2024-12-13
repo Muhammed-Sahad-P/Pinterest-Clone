@@ -11,6 +11,7 @@ import likeRoutes from "./routes/likeRoutes";
 import saveRoutes from "./routes/saveRoutes";
 import userRoutes from "./routes/userRoutes";
 import followRoutes from "./routes/followRoutes";
+import categoryRoutes from "./routes/categoryRoutes";
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use("/api/pins/like", likeRoutes);
 app.use("/api/pins/save", saveRoutes);
 app.use("/api/profile", userRoutes);
 app.use("/api/users", followRoutes);
+app.use("/api/category", categoryRoutes);
 
 app.use(globalErrorHandler);
 
