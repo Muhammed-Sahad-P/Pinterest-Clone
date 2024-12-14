@@ -1,8 +1,12 @@
 import type { Request, Response } from "express";
 import { CustomError } from "../../utils/error/customError";
 import { StandardResponse } from "../../utils/standardResponse";
-import userModel from "../../models/userModel";
 import { CustomRequest } from "../../types/interfaces";
+import userModel from "../../models/userModel";
+import saveModel from "../../models/saveModel";
+import pinModel from "../../models/pinModel";
+import boardModel from "../../models/boardModel";
+import likeModel from "../../models/likeModel";
 
 //Get all users
 const getAllUsers = async (req: CustomRequest, res: Response) => {
@@ -40,7 +44,17 @@ const updateUser = async (req: CustomRequest, res: Response) => {
 //delete user
 const deleteUser = async (req: CustomRequest, res: Response) => {
   const { userId } = req.params;
+
+  await saveModel.deleteMany({ savedBy: userId });
+
+  await pinModel.deleteMany({ postedBy: userId });
+
+  await boardModel.deleteMany({ createdBy: userId });
+
+  await likeModel.deleteMany({ likedBy: userId });
+
   const user = await userModel.findByIdAndDelete(userId);
+
   if (!user) {
     throw new CustomError("User not found", 404);
   }
