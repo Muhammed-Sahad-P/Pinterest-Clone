@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Section3() {
     return (
         <div className="min-h-screen bg-[#DAFFF6] flex justify-center items-center">
-            <div className="container mx-auto px-6">
+            <div className="container mx-auto">
                 <div className="flex flex-col-reverse lg:flex-row items-center justify-between">
                     <div className="relative w-full lg:w-1/2 h-screen  mb-0">
                         <div className="absolute inset-0 w-full h-full">

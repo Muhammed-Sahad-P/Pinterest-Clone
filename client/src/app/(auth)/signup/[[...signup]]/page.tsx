@@ -1,17 +1,67 @@
 "use client";
 import Image from "next/image";
-import React from "react";
-import { useFormik } from "formik";
+import React, { useEffect } from "react";
+import { FormikHelpers, useFormik } from "formik";
 import * as Yup from "yup";
 import { FcGoogle } from "react-icons/fc";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { signup, clearMessages } from "@/lib/store/features/userSlice";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-const Signup: React.FC = () => {
+interface FormValues {
+    email: string;
+    password: string;
+    birthdate: string;
+}
+
+export default function Signup() {
     const [showPassword, setShowPassword] = React.useState(false);
+    const dispatch = useAppDispatch();
+    const router = useRouter();
+
+    const { error, successMessage } = useAppSelector((state) => state.user);
 
     const togglePassword = () => {
         setShowPassword(!showPassword);
     };
+
+    const SignupSchema = Yup.object().shape({
+        email: Yup.string()
+            .email("Invalid email address")
+            .required("Email is required"),
+        password: Yup.string()
+            .min(6, "Password must be at least 6 characters")
+            .required("Password is required"),
+        birthdate: Yup.date()
+            .required("Birthdate is required")
+            .max(new Date(), "Birthdate cannot be in the future"),
+    });
+
+    const handleSubmit = async (
+        values: FormValues,
+        { setSubmitting }: FormikHelpers<FormValues>
+    ) => {
+        dispatch(clearMessages());
+
+        const resultAction = await dispatch(
+            signup({
+                email: values.email,
+                password: values.password,
+                birthdate: values.birthdate,
+            })
+        );
+
+        if (signup.fulfilled.match(resultAction)) {
+            router.push('/signin');
+        }
+        setSubmitting(false);
+    };
+
+    useEffect(() => {
+        dispatch(clearMessages());
+    }, [dispatch]);
 
     const formik = useFormik({
         initialValues: {
@@ -19,21 +69,8 @@ const Signup: React.FC = () => {
             password: "",
             birthdate: "",
         },
-        validationSchema: Yup.object({
-            email: Yup.string()
-                .email("Invalid email address")
-                .required("Email is required"),
-            password: Yup.string()
-                .min(6, "Password must be at least 6 characters")
-                .required("Password is required"),
-            birthdate: Yup.date()
-                .required("Birthdate is required")
-                .max(new Date(), "Birthdate cannot be in the future"),
-        }),
-        onSubmit: (values) => {
-            console.log("Form submitted:", values);
-            alert("Form submitted successfully!");
-        },
+        validationSchema: SignupSchema,
+        onSubmit: handleSubmit,
     });
 
     return (
@@ -41,7 +78,7 @@ const Signup: React.FC = () => {
             <div className="bg-white rounded-3xl w-[90%] max-w-lg shadow-lg relative flex flex-col items-center h-auto">
                 <button
                     className="absolute top-6 right-8 text-black text-2xl font-bold rounded-full w-5 h-5 flex items-center justify-center"
-                    onClick={() => window.history.back()}
+                    onClick={() => window.location.reload()}
                 >
                     ✕
                 </button>
@@ -59,6 +96,15 @@ const Signup: React.FC = () => {
                     </p>
                     <p className="mb-6 text-gray-600">Find new ideas to try</p>
 
+                    {error && (
+                        <div className="text-red-600 text-sm mb-2">{error}</div>
+                    )}
+                    {successMessage && (
+                        <div className="text-green-600 text-sm mb-2">
+                            {successMessage}
+                        </div>
+                    )}
+
                     <form onSubmit={formik.handleSubmit}>
                         <div className="mb-2">
                             <label className="block text-[15px] ml-2 text-gray-700 font-medium mb-1 float-start">
@@ -71,7 +117,9 @@ const Signup: React.FC = () => {
                                 {...formik.getFieldProps("email")}
                             />
                             {formik.touched.email && formik.errors.email ? (
-                                <div className="text-red-600 text-xs mt-1">{formik.errors.email}</div>
+                                <div className="text-red-600 text-xs mt-1">
+                                    {formik.errors.email}
+                                </div>
                             ) : null}
                         </div>
 
@@ -90,10 +138,17 @@ const Signup: React.FC = () => {
                                 onClick={togglePassword}
                                 className="absolute right-4 top-11 text-black"
                             >
-                                {showPassword ? <IoMdEyeOff size={18} /> : <IoMdEye size={18} />}
+                                {showPassword ? (
+                                    <IoMdEyeOff size={18} />
+                                ) : (
+                                    <IoMdEye size={18} />
+                                )}
                             </button>
-                            {formik.touched.password && formik.errors.password ? (
-                                <div className="text-red-600 text-xs mt-1">{formik.errors.password}</div>
+                            {formik.touched.password &&
+                                formik.errors.password ? (
+                                <div className="text-red-600 text-xs mt-1">
+                                    {formik.errors.password}
+                                </div>
                             ) : null}
                         </div>
 
@@ -107,8 +162,11 @@ const Signup: React.FC = () => {
                                 placeholder="mm/dd/yyyy"
                                 {...formik.getFieldProps("birthdate")}
                             />
-                            {formik.touched.birthdate && formik.errors.birthdate ? (
-                                <div className="text-red-600 text-xs mt-1">{formik.errors.birthdate}</div>
+                            {formik.touched.birthdate &&
+                                formik.errors.birthdate ? (
+                                <div className="text-red-600 text-xs mt-1">
+                                    {formik.errors.birthdate}
+                                </div>
                             ) : null}
                         </div>
 
@@ -119,7 +177,9 @@ const Signup: React.FC = () => {
                             Continue
                         </button>
                         <div>
-                            <p className="text-center text-base text-black mb-1">OR</p>
+                            <p className="text-center text-base text-black mb-1">
+                                OR
+                            </p>
                         </div>
                         <button
                             type="button"
@@ -134,23 +194,32 @@ const Signup: React.FC = () => {
                     <p className="text-center text-[12px] text-gray-500 mt-2">
                         By continuing, you agree to Pinterest&apos;s{" "}
                         <span className="block">
-                            <a href="#" className="text-black text-[12px] underline">
+                            <a
+                                href="#"
+                                className="text-black text-[12px] underline"
+                            >
                                 Terms of Service
                             </a>{" "}
                             and acknowledge you&apos;ve read
                         </span>
                         <span className="block">
                             our{" "}
-                            <a href="#" className="text-black text-[12px] underline">
+                            <a
+                                href="#"
+                                className="text-black text-[12px] underline"
+                            >
                                 Privacy Policy. Notice at collection
                             </a>
                         </span>
                     </p>
                     <p className="text-[12px] text-black mt-2">
                         Already a member?{" "}
-                        <a href="/signin" className="text-black font-semibold">
+                        <Link
+                            href="/signin"
+                            className="text-black font-semibold"
+                        >
                             Log in
-                        </a>
+                        </Link>
                     </p>
                 </div>
 
@@ -165,6 +234,4 @@ const Signup: React.FC = () => {
             </div>
         </div>
     );
-};
-
-export default Signup;
+}
