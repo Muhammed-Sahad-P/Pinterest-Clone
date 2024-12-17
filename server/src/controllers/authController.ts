@@ -9,7 +9,13 @@ import mailSender from "../utils/mailSender";
 
 // Register a user
 const register = async (req: Request, res: Response) => {
-  const { username, email, password } = RegisterSchema.parse(req.body);
+  const { email, password, birthdate } = RegisterSchema.parse(req.body);
+
+  const birthdateAsDate = new Date(birthdate);
+
+  if (isNaN(birthdateAsDate.getTime())) {
+    throw new CustomError("Invalid birthdate format", 400);
+  }
 
   const saltRounds = parseInt(process.env.SALT_ROUNDS || "10", 10);
 
@@ -22,15 +28,14 @@ const register = async (req: Request, res: Response) => {
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
   const user = new User({
-    username,
     email,
     password: hashedPassword,
+    birthdate: birthdateAsDate,
   });
 
   await user.save();
 
   const response = {
-    username: user.username,
     email: user.email,
   };
 
@@ -53,16 +58,11 @@ const login = async (req: Request, res: Response) => {
     throw new CustomError("Invalid credentials", 401);
   }
 
-  const token = jwt.sign(
-    { id: user._id, username: user.username },
-    process.env.JWT_SECRET_KEY || "",
-    {
-      expiresIn: "1d",
-    }
-  );
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY || "", {
+    expiresIn: "1d",
+  });
 
   const response = {
-    username: user.username,
     email: user.email,
     token,
   };

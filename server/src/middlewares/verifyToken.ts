@@ -21,11 +21,12 @@ export const verifyToken = async (
     ) as JwtDecoded;
 
     const userExists = await userModel.findById(verified.id);
+
     if (!userExists) {
       throw new CustomError("User not found or blocked", 404);
     }
 
-    req.user = { id: userExists.id, username: userExists.username };
+    req.user = { id: userExists.id };
 
     next();
   } catch (error) {

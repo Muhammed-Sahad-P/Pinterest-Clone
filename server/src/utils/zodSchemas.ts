@@ -1,9 +1,14 @@
-import { z } from "zod";
+import { optional, z } from "zod";
 
 export const RegisterSchema = z.object({
-  username: z.string().min(3, "Username must be at least 3 characters long"),
   email: z.string().email("Invalid email"),
   password: z.string().min(6, "Password must be at least 6 characters long"),
+  birthdate: z
+    .string()
+    .refine((val) => !isNaN(Date.parse(val)), {
+      message: "Invalid date format",
+    })
+    .transform((val) => new Date(val)),
   profilePicture: z.string().optional(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
