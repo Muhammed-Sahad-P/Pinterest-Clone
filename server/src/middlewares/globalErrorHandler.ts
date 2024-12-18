@@ -29,33 +29,32 @@ export const globalErrorHandler = (
     - Stack: ${error?.stack || "No stack available"}
   `);
 
-  if (error instanceof CustomError) {
-    errorResponse(error, res);
-    return;
-  }
+  switch (true) {
+    case error instanceof CustomError:
+      errorResponse(error, res);
+      break;
 
-  if (error.name === "CastError") {
-    const castError = castErrorHandler(error);
-    errorResponse(castError, res);
-    return;
-  }
+    case error.name === "CastError":
+      const castError = castErrorHandler(error);
+      errorResponse(castError, res);
+      break;
 
-  if (error.code === 11000) {
-    const duplicateKeyError = duplicateKeyErrorHandler(error);
-    errorResponse(duplicateKeyError, res);
-    return;
-  }
+    case error.code === 11000:
+      const duplicateKeyError = duplicateKeyErrorHandler(error);
+      errorResponse(duplicateKeyError, res);
+      break;
 
-  if (error.name === "ValidationError") {
-    const validationError = validationErrorHandler(error);
-    errorResponse(validationError, res);
-    return;
-  }
+    case error.name === "ValidationError":
+      const validationError = validationErrorHandler(error);
+      errorResponse(validationError, res);
+      break;
 
-  // default error if none of the above match
-  res.status(500).json({
-    status: "fail",
-    statusCode: 500,
-    message: error?.message || "Something went wrong",
-  });
+    default:
+      // Default error handler if no case matches
+      res.status(500).json({
+        status: "fail",
+        statusCode: 500,
+        message: error?.message || "Something went wrong",
+      });
+  }
 };

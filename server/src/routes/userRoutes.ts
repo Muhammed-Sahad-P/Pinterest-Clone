@@ -5,7 +5,7 @@ import { getUserDetails, updateUser } from "../controllers/userController";
 
 const router = express.Router();
 
-router.get("/me", verifyToken, errorCatch(getUserDetails));
-router.put("/me", verifyToken, errorCatch(updateUser));
+router.get("/:userId", verifyToken, errorCatch(getUserDetails));
+router.put("/:userId", verifyToken, errorCatch(updateUser));
 
 export default router;
