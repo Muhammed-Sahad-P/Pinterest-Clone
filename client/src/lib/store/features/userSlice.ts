@@ -109,6 +109,30 @@ export const forgotPassword = createAsyncThunk(
   }
 );
 
+//reset password
+export const resetPassword = createAsyncThunk(
+  "user/resetPassword",
+  async (
+    { newPassword, token }: { newPassword: string; token: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await Instance.patch(`/auth/resetpassword/${token}`, {
+        newPassword,
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue({
+          message:
+            error.response?.data.message || "Reset Password Request failed",
+        });
+      }
+      return rejectWithValue({ message: "An unknown error occurred" });
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -171,6 +195,22 @@ const userSlice = createSlice({
         state.error =
           (action.payload as { message: string }).message ||
           "Forgot Password Request failed";
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.successMessage =
+          action.payload.message || "Password reset successful!";
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          (action.payload as { message: string }).message ||
+          "Reset Password Request failed";
       });
   },
 });
