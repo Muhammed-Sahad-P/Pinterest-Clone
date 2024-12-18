@@ -86,6 +86,31 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+//fetch User Profile
+export const fetchUserProfile = createAsyncThunk(
+  "user/fetchUserProfile",
+  async (_, { rejectWithValue }) => {
+    const userDetails = Cookies.get("user");
+    const user = JSON.parse(userDetails || "");
+    try {
+      const response = await Instance.get(`/me/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      return response.data.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue({
+          message:
+            error.response?.data.message || "Failed to fetch user profile",
+        });
+      }
+      return rejectWithValue({ message: "An unknown error occurred" });
+    }
+  }
+);
+
 //forget password
 export const forgotPassword = createAsyncThunk(
   "user/forgotPassword",
@@ -137,6 +162,12 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    logout: (state) => {
+      Cookies.remove("user");
+      state.loggedUser = null;
+      state.error = null;
+      state.forgetEmail = null;
+    },
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
@@ -215,6 +246,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { setLoading, clearMessages, setForgetEmail } = userSlice.actions;
+export const { logout, setLoading, clearMessages, setForgetEmail } =
+  userSlice.actions;
 
 export default userSlice.reducer;

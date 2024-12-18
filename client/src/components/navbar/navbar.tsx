@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import LoginModal from "./LoginModal";
-import SignupModal from "./SignupModal";
-import MobileMenu from "./MobileMenu";
-import AuthButtons from "./AuthButton";
-import SearchBar from "./SearchBar";
-import Logo from "./Logo";
-import DesktopMenu from "./DesktopMenu";
-import DesktopMenu1 from "./DesktopMenu1";
+import Logo from "../ui/NavbarItems/Logo";
+import DesktopMenu from "../ui/NavbarItems/DesktopMenu";
+import SearchBar from "../ui/NavbarItems/SearchBar";
+import DesktopMenu1 from "../ui/NavbarItems/DesktopMenu1";
+import AuthButtons from "../ui/NavbarItems/AuthButton";
+import MobileMenu from "../ui/NavbarItems/MobileMenu";
+import LoginModal from "../ui/NavbarItems/LoginModal";
+import SignupModal from "../ui/NavbarItems/SignupModal";
 
 
 const Navbar: React.FC = () => {
