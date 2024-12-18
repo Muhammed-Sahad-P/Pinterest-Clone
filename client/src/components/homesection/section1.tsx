@@ -6,7 +6,7 @@ export default function Section1() {
         <div className="min-h-screen bg-[#FFDFE9] flex justify-center items-center">
             <div className="container mx-auto px-6">
                 <div className="flex flex-col-reverse lg:flex-row items-center justify-between">
-                    <div className="relative w-full lg:w-1/2 mb-12 lg:mb-0">
+                    <div className="relative w-full lg:w-1/2 mb-12 lg:mb-6">
                         <div className="relative">
                             <div className="relative w-[300px] h-[350px] mx-auto rounded-lg overflow-hidden z-10">
                                 <Image

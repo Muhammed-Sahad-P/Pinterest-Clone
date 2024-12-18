@@ -139,7 +139,7 @@ export default function Signin() {
 
                                 <div
                                     onClick={() => handleForgotPassword(values.email)}
-                                    className="text-[15px] text-black mt-1 float-start font-semibold cursor-pointer"
+                                    className="text-[15px] text-black mt-1 float-start font-semibold cursor-pointer hover:underline"
                                 >
                                     Forgot Your Password?
                                 </div>

@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
 
 
     return (
-        <nav className="bg-white dark:bg-darkBg shadow z-50 sticky top-0">
+        <nav className="bg-white dark:bg-darkBg  z-50 sticky top-0">
             <div className="container mx-auto flex items-center justify-between py-5 px-2 md:px-6">
                 <div className="flex">
 
@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
             )}
 
             {isLoginModalOpen && <LoginModal onClose={() => setIsLoginModalOpen(false)} />}
-            {isSignupModalOpen && <SignupModal onClose={() => setIsSignupModalOpen(false)} isOpen={false} />}
+            {isSignupModalOpen && <SignupModal onClose={() => setIsSignupModalOpen(false)} />}
         </nav>
     );
 };

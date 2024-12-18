@@ -2,12 +2,10 @@ import React from "react";
 import Signup from "@/app/(auth)/signup/[[...signup]]/page";
 
 interface ModalProps {
-    isOpen: boolean;
     onClose: () => void;
 }
 
-const SignupModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
-    if (!isOpen) return null;
+const SignupModal: React.FC<ModalProps> = ({ onClose }) => {
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white p-8 rounded-lg w-full sm:w-96 relative">
