@@ -18,8 +18,8 @@ const Navbar: React.FC = () => {
 
 
     return (
-        <nav className="bg-white dark:bg-darkBg  z-50 sticky top-0">
-            <div className="container mx-auto flex items-center justify-between py-5 px-2 md:px-6">
+        <nav className="bg-white dark:bg-darkBg py-4 z-50 sticky top-0">
+            <div className="container mx-auto flex items-center justify-between px-2 md:px-6">
                 <div className="flex">
 
                     <Logo />
