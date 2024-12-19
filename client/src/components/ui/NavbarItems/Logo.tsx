@@ -6,13 +6,10 @@ const Logo: React.FC = () => (
         <Image
             src="/pinterest.png"
             alt="Pinterest Logo"
-            className="h-8 w-8"
+            className="h-6 w-6"
             width={20}
             height={20}
         />
-        <span className="text-md font-bold text-[#E60023] font-oxygen">
-            Pinterest
-        </span>
     </div>
 );
 

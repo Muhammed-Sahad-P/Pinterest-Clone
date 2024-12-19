@@ -3,14 +3,14 @@ interface MobileMenuProps {
     onSearchClick: () => void;
     onLoginClick: () => void;
     onSignupClick: () => void;
+    children: React.ReactNode;
 }
 
 const MobileMenu: React.FC<MobileMenuProps> = ({
+    children,
     onSearchClick,
-    onLoginClick,
-    onSignupClick,
 }) => (
-    <div className="flex flex-col space-y-4 p-4">
+    <div className="flex flex-col space-y-4 p-4 sm:hidden">
         <button onClick={onSearchClick} className="text-gray-700 hover:text-red-500 font-medium">
             Today
         </button>
@@ -20,27 +20,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
         <button onClick={onSearchClick} className="text-gray-700 hover:text-red-500 font-medium">
             Explore
         </button>
-        <button className="text-gray-700 hover:text-red-500 font-medium">
-            About
-        </button>
-        <button className="text-gray-700 hover:text-red-500 font-medium">
-            Business
-        </button>
-        <button className="text-gray-700 hover:text-red-500 font-medium">
-            Blog
-        </button>
-        <button
-            onClick={onLoginClick}
-            className="bg-[#E60023] text-white py-2 px-4 rounded-full hover:bg-red-600 transition duration-300 w-full"
-        >
-            Log in
-        </button>
-        <button
-            onClick={onSignupClick}
-            className="bg-gray-200 text-black py-2 px-4 rounded-full hover:bg-gray-300 transition duration-300 w-full"
-        >
-            Sign up
-        </button>
+        {children}
     </div>
 );
 
