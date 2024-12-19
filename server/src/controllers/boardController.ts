@@ -24,10 +24,9 @@ const createBoard = async (req: CustomRequest, res: Response) => {
 //add pin to board
 const addPinToBoard = async (req: CustomRequest, res: Response) => {
   const { boardId } = req.params;
-  const { imageUrl, description } = PinSchema.parse(req.body);
+  const { description } = PinSchema.parse(req.body);
 
   const board = await boardModel.findById(boardId);
-  console.log(boardId);
 
   if (!board) {
     throw new CustomError("Board not found", 404);
@@ -38,7 +37,6 @@ const addPinToBoard = async (req: CustomRequest, res: Response) => {
   }
 
   const pin = await pinModel.create({
-    imageUrl,
     description,
     boardId,
     createdBy: req.user?.id,
@@ -63,7 +61,12 @@ const getAllBoards = async (req: CustomRequest, res: Response) => {
 //get board by id
 const getBoardById = async (req: CustomRequest, res: Response) => {
   const { id } = req.params;
-  const board = await boardModel.findById(id);
+  const board = await boardModel
+    .findByIdAndUpdate(id, { $push: { pins: req.user?.id } }, { new: true })
+    .populate({
+      path: "pins",
+      select: "imageUrl description likeCount saveCount createdAt",
+    });
 
   if (!board) {
     throw new CustomError("Board not found", 404);

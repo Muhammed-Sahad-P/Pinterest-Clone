@@ -1,16 +1,17 @@
 import express from "express";
 import {
   createPin,
-  deletePinById,
   getAllPins,
   getPinById,
+  deletePinById,
+  upload,
 } from "../controllers/pinController";
-import { errorCatch } from "../utils/error/errorCatch";
 import { verifyToken } from "../middlewares/verifyToken";
+import { errorCatch } from "../utils/error/errorCatch";
 
 const router = express.Router();
 
-router.post("/", verifyToken, errorCatch(createPin));
+router.post("/", verifyToken, upload.single("image"), errorCatch(createPin));
 router.get("/", verifyToken, errorCatch(getAllPins));
 router.get("/:id", verifyToken, errorCatch(getPinById));
 router.delete("/:id", verifyToken, errorCatch(deletePinById));

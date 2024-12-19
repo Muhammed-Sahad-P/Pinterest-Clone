@@ -4,7 +4,7 @@ export interface IPin extends Document {
   imageUrl: string;
   description?: string;
   likeCount: number;
-  saveCount: Number;
+  saveCount: number;
   boardId: mongoose.Types.ObjectId;
   createdBy: mongoose.Types.ObjectId;
 }
@@ -12,7 +12,7 @@ export interface IPin extends Document {
 const PinSchema: Schema = new mongoose.Schema(
   {
     imageUrl: { type: String, required: true },
-    description: { type: String },
+    description: { type: String, maxlength: 500 },
     boardId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Board",
@@ -28,5 +28,8 @@ const PinSchema: Schema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+PinSchema.index({ boardId: 1 });
+PinSchema.index({ createdBy: 1 });
 
 export default mongoose.model<IPin>("Pin", PinSchema);

@@ -1,14 +1,48 @@
-import type { Request, Response } from "express";
+import multer from "multer";
+import { Request, Response } from "express";
 import pinModel from "../models/pinModel";
 import boardModel from "../models/boardModel";
 import { PinSchema } from "../utils/zodSchemas";
 import { CustomError } from "../utils/error/customError";
 import { StandardResponse } from "../utils/standardResponse";
 import { CustomRequest } from "../types/interfaces";
+import cloudinary from "../utils/cloudinary";
 
-// Create pin
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+// Create Pin
 const createPin = async (req: CustomRequest, res: Response) => {
-  const { imageUrl, description, boardId } = PinSchema.parse(req.body);
+  const { description, boardId } = PinSchema.parse(req.body);
+
+  if (!req.file) {
+    throw new CustomError("No image file provided", 400);
+  }
+
+  const result = await new Promise<any>((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        resource_type: "image",
+        public_id: `pins/${Date.now()}`,
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+    if (req.file) {
+      uploadStream.write(req.file.buffer);
+      uploadStream.end();
+    }
+  });
+
+  const imageUrl = result.secure_url;
+  if (!imageUrl) {
+    throw new CustomError("Failed to upload image", 500);
+  }
 
   const board = await boardModel.findById(boardId);
   if (!board) {
@@ -29,7 +63,7 @@ const createPin = async (req: CustomRequest, res: Response) => {
   res.status(201).json(new StandardResponse("Pin created successfully", pin));
 };
 
-// Get all pins
+// Get all Pins
 const getAllPins = async (_req: Request, res: Response) => {
   const pins = await pinModel
     .find()
@@ -39,7 +73,7 @@ const getAllPins = async (_req: Request, res: Response) => {
   res.status(200).json(new StandardResponse("Pins fetched successfully", pins));
 };
 
-// Get pin by id
+// Get Pin by ID
 const getPinById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
@@ -54,7 +88,7 @@ const getPinById = async (req: Request, res: Response) => {
   res.status(200).json(new StandardResponse("Pin fetched successfully", pin));
 };
 
-// Delete pin by id
+// Delete Pin by ID
 const deletePinById = async (req: CustomRequest, res: Response) => {
   const { id } = req.params;
 
@@ -72,4 +106,4 @@ const deletePinById = async (req: CustomRequest, res: Response) => {
   res.status(200).json(new StandardResponse("Pin deleted successfully", null));
 };
 
-export { createPin, getAllPins, getPinById, deletePinById };
+export { createPin, getAllPins, getPinById, deletePinById, upload };

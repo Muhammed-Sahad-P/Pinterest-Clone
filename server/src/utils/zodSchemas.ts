@@ -29,7 +29,6 @@ export const EditUserSchema = z.object({
 });
 
 export const PinSchema = z.object({
-  imageUrl: z.string().url("Invalid URL"),
   description: z.string().optional(),
   boardId: z.string().min(24, "Invalid board ID").optional(),
   createdBy: z.string().min(24, "Invalid user ID").optional(),
