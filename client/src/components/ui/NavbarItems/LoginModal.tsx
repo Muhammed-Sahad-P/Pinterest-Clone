@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Signin from "@/app/(auth)/signin/[[...signin]]/page";
 

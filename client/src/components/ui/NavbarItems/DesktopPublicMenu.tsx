@@ -1,27 +1,36 @@
 "use client";
-
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-interface DesktopMenuProps {
+interface DesktopPublicMenuProps {
     onSearchClick: () => void;
 }
 
-const DesktopMenu: React.FC<DesktopMenuProps> = () => {
+const DesktopPublicMenu: React.FC<DesktopPublicMenuProps> = () => {
     const currentRoute = usePathname();
 
     return (
         <div className="hidden lg:flex items-center justify-between w-full">
             <div className="flex space-x-1 ml-2">
                 <Link
-                    href="/u/home"
-                    className={`${currentRoute === "/u/home"
+                    href="/p/today"
+                    className={`${currentRoute === "/p/today"
                         ? "bg-black text-white"
                         : "text-black hover:text-red-500"
                         } font-medium px-4 py-2 rounded-full`}
                 >
-                    Home
+                    Today
+                </Link>
+
+                <Link
+                    href="/p/watch"
+                    className={`${currentRoute === "/p/watch"
+                        ? "bg-black text-white"
+                        : "text-black hover:text-red-500"
+                        } font-medium px-4 py-2 rounded-full`}
+                >
+                    Watch
                 </Link>
 
                 <Link
@@ -33,19 +42,9 @@ const DesktopMenu: React.FC<DesktopMenuProps> = () => {
                 >
                     Explore
                 </Link>
-
-                <Link
-                    href="/u/create"
-                    className={`${currentRoute === "/u/create"
-                        ? "bg-black text-white"
-                        : "text-black hover:text-red-500"
-                        } font-medium px-4 py-2 rounded-full`}
-                >
-                    Create
-                </Link>
             </div>
         </div>
     );
 };
 
-export default DesktopMenu;
+export default DesktopPublicMenu;

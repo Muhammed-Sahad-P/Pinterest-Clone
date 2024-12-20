@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import { usePathname, useRouter } from "next/navigation";
 import Logo from "../ui/NavbarItems/Logo";
 import DesktopMenu from "../ui/NavbarItems/DesktopMenu";
 import SearchBar from "../ui/NavbarItems/SearchBar";
@@ -11,13 +12,17 @@ import LoginModal from "../ui/NavbarItems/LoginModal";
 import SignupModal from "../ui/NavbarItems/SignupModal";
 import LoginedItems from "../ui/NavbarItems/loginedItems";
 import MobileMenu1 from "../ui/NavbarItems/MobileMenu1";
+import DesktopPublicMenu from "../ui/NavbarItems/DesktopPublicMenu";
 
 const Navbar: React.FC = () => {
-    const [isSearchVisible, setIsSearchVisible] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const pathname = usePathname();
+
+    const router = useRouter();
 
     useEffect(() => {
         const token = Cookies.get("user");
@@ -26,20 +31,25 @@ const Navbar: React.FC = () => {
         }
     }, []);
 
+    const isDesktopMenuPage = ["/u/home", "/p/watch", "/p/explore", "/p/today"].includes(pathname);
+
     return (
         <nav className="bg-white dark:bg-darkBg py-6 z-50 sticky top-0">
             <div className="container mx-auto flex items-center justify-between px-4 md:px-6">
                 <div className="flex items-center space-x-4">
                     <Logo />
-                    {isLoggedIn ? null : <span className="text-md font-bold text-[#E60023] font-oxygen">
-                        Pinterest
-                    </span>}
-                    <div className="hidden md:block">
-                        <DesktopMenu onSearchClick={() => setIsSearchVisible(true)} />
-                    </div>
+                    {isLoggedIn ? null : (
+                        <span className="text-md font-bold text-[#E60023] font-oxygen cursor-pointer" onClick={() => { router.push("/home") }}>
+                            Pinterest
+                        </span>
+                    )}
+                    {isLoggedIn ? <div className="hidden md:block">
+                        <DesktopMenu onSearchClick={() => { }} />
+                    </div> : <DesktopPublicMenu onSearchClick={() => { }} />}
+
                 </div>
 
-                {isSearchVisible && <SearchBar onClose={() => setIsSearchVisible(false)} />}
+                {isDesktopMenuPage && <SearchBar />}
 
                 <div className="flex items-center space-x-4">
                     {isLoggedIn ? (
@@ -69,18 +79,16 @@ const Navbar: React.FC = () => {
 
             {isMobileMenuOpen && (
                 <MobileMenu
-                    onSearchClick={() => setIsSearchVisible(true)}
+                    onSearchClick={() => { }}
                     onLoginClick={() => setIsLoginModalOpen(true)}
                     onSignupClick={() => setIsSignupModalOpen(true)}
                 >
                     {!isLoggedIn && (
-                        <>
-                            <MobileMenu1
-                                onLoginClick={() => setIsLoginModalOpen(true)}
-                                onSignupClick={() => setIsSignupModalOpen(true)}
-                                onSearchClick={() => setIsSearchVisible(true)}
-                            />
-                        </>
+                        <MobileMenu1
+                            onSearchClick={() => { }}
+                            onLoginClick={() => setIsLoginModalOpen(true)}
+                            onSignupClick={() => setIsSignupModalOpen(true)}
+                        />
                     )}
                 </MobileMenu>
             )}

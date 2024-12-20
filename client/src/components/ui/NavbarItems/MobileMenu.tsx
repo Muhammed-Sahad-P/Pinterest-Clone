@@ -12,7 +12,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
 }) => (
     <div className="flex flex-col space-y-4 p-4 sm:hidden">
         <button onClick={onSearchClick} className="text-gray-700 hover:text-red-500 font-medium">
-            Today
+            Home
         </button>
         <button onClick={onSearchClick} className="text-gray-700 hover:text-red-500 font-medium">
             Watch

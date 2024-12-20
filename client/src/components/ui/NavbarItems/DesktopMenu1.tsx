@@ -1,3 +1,4 @@
+"use client";
 const DesktopMenu1 = () => {
     return (
         <div className="hidden lg:flex space-x-6 mr-8">
