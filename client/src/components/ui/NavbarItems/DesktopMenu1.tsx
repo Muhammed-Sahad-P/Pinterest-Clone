@@ -1,25 +1,28 @@
 "use client";
+
+import Link from "next/link";
+
 const DesktopMenu1 = () => {
     return (
         <div className="hidden lg:flex space-x-6 mr-8">
-            <a
+            <Link
                 href="#"
                 className="text-black hover:text-red-500 font-medium"
             >
                 About
-            </a>
-            <a
+            </Link>
+            <Link
                 href="#"
                 className="text-black hover:text-red-500 font-medium"
             >
                 Business
-            </a>
-            <a
+            </Link>
+            <Link
                 href="#"
                 className="text-black hover:text-red-500 font-medium"
             >
                 Blog
-            </a>
+            </Link>
         </div>
     )
 };

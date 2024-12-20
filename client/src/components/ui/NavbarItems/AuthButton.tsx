@@ -12,12 +12,14 @@ const AuthButtons: React.FC<AuthButtonsProps> = ({
 }) => (
     <div className="flex space-x-4">
         <button
+            aria-label="Log in"
             onClick={onLoginClick}
             className="bg-[#E60023] text-white text-base p-2 rounded-full hover:bg-red-600 transition duration-300"
         >
             Log in
         </button>
         <button
+            aria-label="Sign up"
             onClick={onSignupClick}
             className="bg-gray-200 text-black text-base p-2 rounded-full hover:bg-gray-300 transition duration-300"
         >

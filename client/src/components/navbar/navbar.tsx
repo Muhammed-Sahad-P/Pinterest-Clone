@@ -18,18 +18,19 @@ const Navbar: React.FC = () => {
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
     const pathname = usePathname();
-
     const router = useRouter();
 
     useEffect(() => {
         const token = Cookies.get("user");
-        if (token) {
-            setIsLoggedIn(true);
-        }
+        setIsLoggedIn(!!token);
     }, []);
+
+    if (isLoggedIn === null) {
+        return null;
+    }
 
     const isDesktopMenuPage = ["/u/home", "/p/watch", "/p/explore", "/p/today"].includes(pathname);
 
@@ -39,14 +40,22 @@ const Navbar: React.FC = () => {
                 <div className="flex items-center space-x-4">
                     <Logo />
                     {isLoggedIn ? null : (
-                        <span className="text-md font-bold text-[#E60023] font-oxygen cursor-pointer" onClick={() => { router.push("/home") }}>
+                        <span
+                            className="text-md font-bold text-[#E60023] font-oxygen cursor-pointer"
+                            onClick={() => {
+                                router.push("/home");
+                            }}
+                        >
                             Pinterest
                         </span>
                     )}
-                    {isLoggedIn ? <div className="hidden md:block">
-                        <DesktopMenu onSearchClick={() => { }} />
-                    </div> : <DesktopPublicMenu onSearchClick={() => { }} />}
-
+                    {isLoggedIn ? (
+                        <div className="hidden md:block">
+                            <DesktopMenu onSearchClick={() => { }} />
+                        </div>
+                    ) : (
+                        <DesktopPublicMenu onSearchClick={() => { }} />
+                    )}
                 </div>
 
                 {isDesktopMenuPage && <SearchBar />}
@@ -99,3 +108,4 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+
