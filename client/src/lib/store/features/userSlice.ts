@@ -3,6 +3,7 @@ import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 
 interface UserState {
+  currentAccount: string | null;
   user: { email: string; password: string } | null;
   loading: boolean;
   successMessage: string | null;
@@ -13,6 +14,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
+  currentAccount: null,
   user: null,
   loading: false,
   error: null,

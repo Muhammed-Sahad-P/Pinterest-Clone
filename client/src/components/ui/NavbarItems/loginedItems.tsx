@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { FaUserCircle } from "react-icons/fa";
 import { LuMessageCircleMore } from "react-icons/lu";
 import { IoNotifications } from "react-icons/io5";
 import { NavDropdown } from "./NavDropdown";
@@ -21,11 +20,6 @@ const LoginedItems: React.FC = () => (
         >
             <LuMessageCircleMore size={25} />
         </button>
-
-        <div className="flex items-center space-x-1 cursor-pointer text-[#767676] dark:text-gray-200 hover:bg-[#E9E9E9] rounded-full"
-            title="Profile">
-            <FaUserCircle size={25} />
-        </div>
         <div className="flex items-center space-x-1 cursor-pointer text-[#767676] dark:text-gray-200 hover:bg-[#E9E9E9] rounded-full"
             title="Accounts and Settings">
             <NavDropdown />
