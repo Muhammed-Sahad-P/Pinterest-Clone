@@ -8,17 +8,22 @@ export function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
   const pathname = url.pathname;
 
-  if (!token && isUserProtectedRoute(pathname)) {
-    url.pathname = "/home";
-    return NextResponse.redirect(url);
-  }
+  switch (true) {
+    case token && pathname === "/":
+      url.pathname = "/u/home";
+      return NextResponse.rewrite(url);
 
-  if (token && (pathname === "/signin" || pathname === "/signup")) {
-    url.pathname = "/u/home";
-    return NextResponse.redirect(url);
-  }
+    case isUserProtectedRoute(pathname) && !token:
+      url.pathname = "/";
+      return NextResponse.redirect(url);
 
-  return NextResponse.next();
+    case token && ["/signin", "/signup"].includes(pathname):
+      url.pathname = "/u/home";
+      return NextResponse.redirect(url);
+
+    default:
+      return NextResponse.next();
+  }
 }
 
 export const config = {

@@ -13,6 +13,8 @@ import SignupModal from "../ui/NavbarItems/SignupModal";
 import LoginedItems from "../ui/NavbarItems/loginedItems";
 import MobileMenu1 from "../ui/NavbarItems/MobileMenu1";
 import DesktopPublicMenu from "../ui/NavbarItems/DesktopPublicMenu";
+import MobilePublicMenu from "../ui/NavbarItems/MobilePublicMenu";
+import { FcMenu } from "react-icons/fc";
 
 const Navbar: React.FC = () => {
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -81,25 +83,31 @@ const Navbar: React.FC = () => {
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         className="text-gray-700 md:hidden focus:outline-none hover:text-red-500"
                     >
-                        ☰
+                        <FcMenu size={24} />
                     </button>
                 </div>
             </div>
 
             {isMobileMenuOpen && (
-                <MobileMenu
-                    onSearchClick={() => { }}
-                    onLoginClick={() => setIsLoginModalOpen(true)}
-                    onSignupClick={() => setIsSignupModalOpen(true)}
-                >
-                    {!isLoggedIn && (
+                isLoggedIn ? (
+                    <MobileMenu
+                        onSearchClick={() => { }}
+                        onLoginClick={() => setIsLoginModalOpen(true)}
+                        onSignupClick={() => setIsSignupModalOpen(true)}
+                    >
+                    </MobileMenu>
+                ) : (
+                    <>
+                        <MobilePublicMenu />
                         <MobileMenu1
                             onSearchClick={() => { }}
                             onLoginClick={() => setIsLoginModalOpen(true)}
                             onSignupClick={() => setIsSignupModalOpen(true)}
-                        />
-                    )}
-                </MobileMenu>
+                        >
+                        </MobileMenu1>
+                    </>
+                )
+
             )}
             {isLoginModalOpen && <LoginModal onClose={() => setIsLoginModalOpen(false)} />}
             {isSignupModalOpen && <SignupModal onClose={() => setIsSignupModalOpen(false)} />}
