@@ -6,7 +6,8 @@ import * as Yup from "yup";
 import { FcGoogle } from "react-icons/fc";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { signup, clearMessages } from "@/lib/store/features/userSlice";
+import { clearMessages } from "@/lib/store/features/userSlice";
+import { signup } from "@/lib/store/thunks/user-thunks";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 

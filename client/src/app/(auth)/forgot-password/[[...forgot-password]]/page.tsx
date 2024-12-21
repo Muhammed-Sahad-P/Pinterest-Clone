@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { FiSearch, FiX } from "react-icons/fi";
 import { useSelector, useDispatch } from "react-redux";
-import { forgotPassword } from "@/lib/store/features/userSlice";
+import { forgotPassword } from "@/lib/store/thunks/user-thunks";
 import { AppDispatch, RootState } from "@/lib/store";
 
 export default function ForgotPassword() {

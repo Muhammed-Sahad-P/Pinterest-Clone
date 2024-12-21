@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { AppDispatch, RootState } from "@/lib/store";
-import { resetPassword, clearMessages } from "@/lib/store/features/userSlice";
+import { clearMessages } from "@/lib/store/features/userSlice";
+import { resetPassword } from "@/lib/store/thunks/user-thunks";
 import { useDispatch, useSelector } from "react-redux";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useRouter } from "next/navigation";
