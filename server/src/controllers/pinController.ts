@@ -88,6 +88,24 @@ const getPinById = async (req: Request, res: Response) => {
   res.status(200).json(new StandardResponse("Pin fetched successfully", pin));
 };
 
+//update pin
+const updatePin = async (req: CustomRequest, res: Response) => {
+  const { id } = req.params;
+  const updateData = PinSchema.parse(req.body);
+
+  const updatePin = await pinModel.findByIdAndUpdate(id, updateData, {
+    new: true,
+  });
+
+  if (!updatePin) {
+    throw new CustomError("Pin not found", 404);
+  }
+
+  res
+    .status(200)
+    .json(new StandardResponse("Pin updated successfully", updatePin));
+};
+
 // Delete Pin by ID
 const deletePinById = async (req: CustomRequest, res: Response) => {
   const { id } = req.params;
@@ -106,4 +124,4 @@ const deletePinById = async (req: CustomRequest, res: Response) => {
   res.status(200).json(new StandardResponse("Pin deleted successfully", null));
 };
 
-export { createPin, getAllPins, getPinById, deletePinById, upload };
+export { createPin, getAllPins, getPinById, updatePin, deletePinById, upload };
