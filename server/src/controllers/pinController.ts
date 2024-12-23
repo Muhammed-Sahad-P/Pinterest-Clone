@@ -60,6 +60,9 @@ const createPin = async (req: CustomRequest, res: Response) => {
     createdBy: req.user?.id,
   });
 
+  board.pins.push(pin._id);
+  await board.save();
+
   res.status(201).json(new StandardResponse("Pin created successfully", pin));
 };
 

@@ -1,7 +1,8 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IPin extends Document {
-  imageUrl: string;
+  _id: mongoose.Types.ObjectId;
+  imageUrl?: string;
   description?: string;
   likeCount: number;
   saveCount: number;

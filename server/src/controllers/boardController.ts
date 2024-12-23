@@ -24,7 +24,7 @@ const createBoard = async (req: CustomRequest, res: Response) => {
 //add pin to board
 const addPinToBoard = async (req: CustomRequest, res: Response) => {
   const { boardId } = req.params;
-  const { description } = PinSchema.parse(req.body);
+  const { description, imageUrl } = PinSchema.parse(req.body);
 
   const board = await boardModel.findById(boardId);
 
@@ -38,10 +38,13 @@ const addPinToBoard = async (req: CustomRequest, res: Response) => {
 
   const pin = await pinModel.create({
     description,
+    imageUrl,
     boardId,
     createdBy: req.user?.id,
   });
 
+  board.pins.push(pin._id);
+  await board.save();
   res
     .status(200)
     .json(new StandardResponse("Pin added to board Successfully", pin));
