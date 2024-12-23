@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function UserCreate() {
+export default function CreatePinForm() {
     return (
         <div>
-            <h1>Create Page</h1>
+
         </div>
     )
 }

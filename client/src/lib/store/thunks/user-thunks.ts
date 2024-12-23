@@ -1,13 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import Cookies from "js-cookie";
-
-const Instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+import axiosInstance from "@/utils/axios";
 
 // Signup
 export const signup = createAsyncThunk(
@@ -21,7 +15,7 @@ export const signup = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await Instance.post("/auth/register", userData);
+      const response = await axiosInstance.post("/auth/register", userData);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -42,7 +36,7 @@ export const loginUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await Instance.post("/auth/login", credentials);
+      const response = await axiosInstance.post("/auth/login", credentials);
       const { data } = response;
       const userData = data.data;
       Cookies.set(
@@ -75,7 +69,7 @@ export const fetchUserProfile = createAsyncThunk(
     const userDetails = Cookies.get("user");
     const user = JSON.parse(userDetails || "");
     try {
-      const response = await Instance.get(`/me/${user.id}`, {
+      const response = await axiosInstance.get(`/me/${user.id}`, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -98,7 +92,9 @@ export const forgotPassword = createAsyncThunk(
   "user/forgotPassword",
   async (email: string | null, { rejectWithValue }) => {
     try {
-      const response = await Instance.post("/auth/forgotpassword", { email });
+      const response = await axiosInstance.post("/auth/forgotpassword", {
+        email,
+      });
       return {
         message:
           response.data.message ||
@@ -124,9 +120,12 @@ export const resetPassword = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await Instance.patch(`/auth/resetpassword/${token}`, {
-        newPassword,
-      });
+      const response = await axiosInstance.patch(
+        `/auth/resetpassword/${token}`,
+        {
+          newPassword,
+        }
+      );
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

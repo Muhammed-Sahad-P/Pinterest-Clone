@@ -31,7 +31,7 @@ const PinUpload: React.FC = () => {
             });
 
             setLoading(false);
-            setImageUrl(response.data.imageUrl); // Set the URL of the uploaded image
+            setImageUrl(response.data.imageUrl);
         } catch (error) {
             setLoading(false);
             console.error('Error uploading image:', error);
