@@ -9,7 +9,6 @@ import { CustomRequest } from "../types/interfaces";
 //create board
 const createBoard = async (req: CustomRequest, res: Response) => {
   const { name, description } = BoardSchema.parse(req.body);
-  console.log(req.user);
   const board = await boardModel.create({
     name,
     description,
