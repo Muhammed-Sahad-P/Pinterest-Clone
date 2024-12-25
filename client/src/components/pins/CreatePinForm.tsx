@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/store";
 import { fetchBoards, createBoard } from "@/lib/store/thunks/board-thunk";
 import { createPin } from "@/lib/store/thunks/pin-thunk";
+import Image from "next/image";
 
 const CreatePinForm: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -21,6 +22,7 @@ const CreatePinForm: React.FC = () => {
     const [newBoardDescription, setNewBoardDescription] = useState("");
     const [isMounted, setIsMounted] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isFileSelected, setIsFileSelected] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
@@ -30,6 +32,7 @@ const CreatePinForm: React.FC = () => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setImage(e.target.files[0]);
+            setIsFileSelected(true);
         }
     };
 
@@ -79,93 +82,107 @@ const CreatePinForm: React.FC = () => {
     if (!isMounted) return null;
 
     return (
-        <div className="flex items-center justify-center w-full min-h-screen bg-gray-100">
+        <div className="flex items-center justify-center w-full min-h-screen bg-white">
             <div className="w-full max-w-3xl p-6 bg-white shadow-lg rounded-lg">
-                <h1 className="text-2xl font-semibold mb-5 text-center">Create New Pin</h1>
+                <h1 className="text-2xl font-semibold mb-5 text-center">Create Pin</h1>
                 <form onSubmit={handleSubmit} className="space-y-5">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Title</label>
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            placeholder="Enter pin title"
-                            required
-                        />
+                    <div className="flex space-x-8">
+                        <div className="flex-1">
+                            {image && (
+                                <div className="flex justify-center items-center">
+                                    <Image
+                                        src={URL.createObjectURL(image)}
+                                        alt="Selected Preview"
+                                        className="w-full h-64 object-cover rounded-md"
+                                        width={400}
+                                        height={400}
+                                    />
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="flex-1">
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="text-sm text-black">Title</label>
+                                    <input
+                                        type="text"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        className={`mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${isFileSelected ? "blur-none" : "blur-sm"
+                                            }`}
+                                        placeholder="Add a title"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="text-sm text-black">Description</label>
+                                    <input
+                                        type="text"
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                        className={`mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${isFileSelected ? "blur-none" : "blur-sm"
+                                            }`}
+                                        placeholder="Add a detailed description"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className=" text-sm text-black">Board</label>
+                                    {boardLoading ? (
+                                        <p className="text-sm text-gray-500">Loading boards...</p>
+                                    ) : (
+                                        <select
+                                            value={selectedBoard}
+                                            onChange={(e) => setSelectedBoard(e.target.value)}
+                                            className={`mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${isFileSelected ? "blur-none" : "blur-sm"
+                                                }`}
+                                            required
+                                        >
+                                            <option value="">Choose a board</option>
+                                            {boards?.data?.map((board) => (
+                                                <option key={board._id} value={board._id}>
+                                                    {board.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <label className="text-sm text-black ">Create a New Board</label>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsModalOpen(true)}
+                                        className="w-full py-2 px-4 bg-[#E60023] text-white rounded-xl hover:bg-[#E60023]/80"
+                                    >
+                                        Create New Board
+                                    </button>
+                                </div>
+
+                                <div>
+                                    <button
+                                        type="submit"
+                                        className="w-full py-2 px-4 bg-[#E60023] text-white rounded-xl hover:bg-[#E60023]/80"
+                                        disabled={pinLoading}
+                                    >
+                                        {pinLoading ? "Creating Pin..." : "Create Pin"}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                            Description
-                        </label>
-                        <textarea
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            placeholder="Enter pin description"
-                            rows={4}
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                            Upload Image
-                        </label>
+                    <div className="flex justify-center items-center mt-4">
                         <input
                             type="file"
                             accept="image/*"
                             onChange={handleImageChange}
-                            className="mt-1 block w-full"
+                            className="mt-1 block w-auto"
                             required
                         />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                            Select Board
-                        </label>
-                        {boardLoading ? (
-                            <p className="text-sm text-gray-500">Loading boards...</p>
-                        ) : (
-                            <select
-                                value={selectedBoard}
-                                onChange={(e) => setSelectedBoard(e.target.value)}
-                                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                required
-                            >
-                                <option value="">Select a board</option>
-                                {boards?.data?.map((board) => (
-                                    <option key={board._id} value={board._id}>
-                                        {board.name}
-                                    </option>
-                                ))}
-                            </select>
-                        )}
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                            Or Create a New Board
-                        </label>
-                        <button
-                            type="button"
-                            onClick={() => setIsModalOpen(true)}
-                            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-                        >
-                            Create New Board
-                        </button>
-                    </div>
-
-                    <div>
-                        <button
-                            type="submit"
-                            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-                            disabled={pinLoading}
-                        >
-                            {pinLoading ? "Creating Pin..." : "Create Pin"}
-                        </button>
                     </div>
                 </form>
             </div>
@@ -188,12 +205,12 @@ const CreatePinForm: React.FC = () => {
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Board Description</label>
-                            <textarea
+                            <input
+                                type="text"
                                 value={newBoardDescription}
                                 onChange={(e) => setNewBoardDescription(e.target.value)}
                                 placeholder="Enter board description"
                                 className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                rows={3}
                                 required
                             />
                         </div>
@@ -209,10 +226,10 @@ const CreatePinForm: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={handleCreateBoard}
-                                className="py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-                                disabled={!newBoardName.trim() || !newBoardDescription.trim()}
+                                className="py-2 px-4 bg-[#E60023] text-white rounded-md hover:bg-[#E60023]/80"
+                                disabled={boardLoading}
                             >
-                                Create Board
+                                {boardLoading ? "Creating..." : "Create Board"}
                             </button>
                         </div>
                     </div>
