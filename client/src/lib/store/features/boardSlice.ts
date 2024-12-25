@@ -10,6 +10,7 @@ import {
 export interface Board {
   _id: string;
   name: string;
+  data: string;
 }
 
 interface BoardState {
@@ -37,11 +38,15 @@ const boardSlice = createSlice({
       })
       .addCase(createBoard.fulfilled, (state, action) => {
         state.loading = false;
-        state.boards.push(action.payload);
+        if (Array.isArray(state.boards)) {
+          state.boards.push(action.payload);
+        } else {
+          state.boards = [action.payload];
+        }
       })
       .addCase(createBoard.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = (action.payload as { message: string })?.message || null;
       })
       .addCase(fetchBoards.pending, (state) => {
         state.loading = true;
@@ -53,7 +58,7 @@ const boardSlice = createSlice({
       })
       .addCase(fetchBoards.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = (action.payload as { message: string })?.message || null;
       })
       .addCase(fetchBoardById.pending, (state) => {
         state.loading = true;
@@ -65,7 +70,7 @@ const boardSlice = createSlice({
       })
       .addCase(fetchBoardById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = (action.payload as { message: string })?.message || null;
       })
       .addCase(updateBoard.pending, (state) => {
         state.loading = true;
@@ -77,7 +82,7 @@ const boardSlice = createSlice({
       })
       .addCase(updateBoard.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = (action.payload as { message: string })?.message || null;
       })
       .addCase(deleteBoard.pending, (state) => {
         state.loading = true;
@@ -91,7 +96,7 @@ const boardSlice = createSlice({
       })
       .addCase(deleteBoard.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = (action.payload as { message: string })?.message || null;
       });
   },
 });

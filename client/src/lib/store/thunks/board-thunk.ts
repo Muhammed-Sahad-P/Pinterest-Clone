@@ -2,12 +2,17 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import axiosInstance from "@/utils/axios";
 
-//create board
 export const createBoard = createAsyncThunk(
   "board/createBoard",
-  async (title: string, { rejectWithValue }) => {
+  async (
+    { name, description }: { name: string; description: string },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await axiosInstance.post("/boards", { title });
+      const response = await axiosInstance.post("/boards", {
+        name,
+        description,
+      });
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
