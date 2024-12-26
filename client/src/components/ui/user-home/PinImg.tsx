@@ -21,30 +21,36 @@ const PinImag: React.FC<PinImageWithButtonsProps> = ({ pin }) => {
                     height={300}
                 />
 
-                <ActionButton
-                    className="absolute top-4 left-2 bg-transparent text-white px-3 py-2 rounded-full text-sm sm:text-base flex items-center hover:bg-[#665b5b] hover:bg-opacity-40 hover:backdrop-blur-none"
-                    icon={MdKeyboardArrowDown}
-                >
-                    <span className="font-semibold">Profile</span>
-                </ActionButton>
+                <div className="absolute top-4 left-2 group-hover:block hidden">
+                    <ActionButton
+                        className="bg-transparent text-white px-3 py-2 rounded-full text-sm sm:text-base flex items-center hover:bg-[#665b5b] hover:bg-opacity-40 hover:backdrop-blur-none"
+                        icon={MdKeyboardArrowDown}
+                    >
+                        <span className="font-semibold">Profile</span>
+                    </ActionButton>
+                </div>
 
+                <div className="absolute top-4 right-3 group-hover:block hidden">
+                    <ActionButton
+                        className="bg-[#E60023] hover:bg-[#E60023]/80 text-white px-4 py-3 rounded-full text-sm sm:text-base"
+                    >
+                        Save
+                    </ActionButton>
+                </div>
 
+                <div className="absolute bottom-2 right-2 group-hover:block hidden">
+                    <ActionButton
+                        className="p-2 sm:p-2 bg-white rounded-full text-center text-sm sm:text-lg"
+                        icon={SlOptions}
+                    />
+                </div>
 
-                <ActionButton
-                    className="absolute top-4 right-3 bg-[#E60023] hover:bg-[#E60023]/80 text-white px-4 py-3 rounded-full text-sm sm:text-base"
-                >
-                    Save
-                </ActionButton>
-
-                <ActionButton
-                    className="absolute bottom-2 right-2 p-2 sm:p-2 bg-white rounded-full text-center text-sm sm:text-lg"
-                    icon={SlOptions}
-                />
-
-                <ActionButton
-                    className="absolute bottom-2 right-14 p-2 sm:p-2 bg-white rounded-full text-center text-sm sm:text-lg"
-                    icon={MdOutlineFileUpload}
-                />
+                <div className="absolute bottom-2 right-14 group-hover:block hidden">
+                    <ActionButton
+                        className="p-2 sm:p-2 bg-white rounded-full text-center text-sm sm:text-lg"
+                        icon={MdOutlineFileUpload}
+                    />
+                </div>
             </div>
         </div>
     );

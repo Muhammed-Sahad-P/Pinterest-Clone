@@ -9,3 +9,8 @@ export interface ButtonProps {
   icon?: React.ElementType;
   onClick?: () => void;
 }
+
+export interface Board {
+  _id: string;
+  name: string;
+}
