@@ -6,6 +6,7 @@ import { AppDispatch, RootState } from "@/lib/store";
 import { fetchBoards, createBoard } from "@/lib/store/thunks/board-thunk";
 import { createPin } from "@/lib/store/thunks/pin-thunk";
 import Image from "next/image";
+import { toast } from "sonner";
 
 const CreatePinForm: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -38,7 +39,9 @@ const CreatePinForm: React.FC = () => {
 
     const handleCreateBoard = async () => {
         if (!newBoardName.trim() || !newBoardDescription.trim()) {
-            alert("Please provide both board name and description.");
+            toast("Please provide both board name and description", {
+                description: "Both fields are required to create a board.",
+            });
             return;
         }
 
@@ -52,6 +55,9 @@ const CreatePinForm: React.FC = () => {
             setNewBoardName("");
             setNewBoardDescription("");
             setIsModalOpen(false);
+            toast("Board created successfully", {
+                description: `Board "${newBoardName}" has been created.`,
+            });
         }
     };
 
@@ -59,7 +65,9 @@ const CreatePinForm: React.FC = () => {
         e.preventDefault();
 
         if (!title.trim() || !description.trim() || !image || !selectedBoard) {
-            alert("Please fill all fields.");
+            toast("Please fill all fields", {
+                description: "All fields are required to create a pin.",
+            });
             return;
         }
 
@@ -71,7 +79,9 @@ const CreatePinForm: React.FC = () => {
 
         const response = await dispatch(createPin(formData));
         if (response.meta.requestStatus === "fulfilled") {
-            alert("Pin created successfully!");
+            toast("Pin created successfully", {
+                description: `Your pin "${title}" has been created.`,
+            });
             setTitle("");
             setDescription("");
             setImage(null);
@@ -130,7 +140,7 @@ const CreatePinForm: React.FC = () => {
                                 </div>
 
                                 <div>
-                                    <label className=" text-sm text-black">Board</label>
+                                    <label className="text-sm text-black">Board</label>
                                     {boardLoading ? (
                                         <p className="text-sm text-gray-500">Loading boards...</p>
                                     ) : (
@@ -142,8 +152,8 @@ const CreatePinForm: React.FC = () => {
                                             required
                                         >
                                             <option value="">Choose a board</option>
-                                            {boards?.map((board) => (
-                                                <option key={board._id} value={board._id}>
+                                            {boards?.map((board, index) => (
+                                                <option key={index} value={board._id}>
                                                     {board.name}
                                                 </option>
                                             ))}
@@ -152,7 +162,7 @@ const CreatePinForm: React.FC = () => {
                                 </div>
 
                                 <div>
-                                    <label className="text-sm text-black ">Create a New Board</label>
+                                    <label className="text-sm text-black">Create a New Board</label>
                                     <button
                                         type="button"
                                         onClick={() => setIsModalOpen(true)}
@@ -229,7 +239,7 @@ const CreatePinForm: React.FC = () => {
                                 className="py-2 px-4 bg-[#E60023] text-white rounded-md hover:bg-[#E60023]/80"
                                 disabled={boardLoading}
                             >
-                                {boardLoading ? "Creating..." : "Create Board"}
+                                {boardLoading ? "Creating Board..." : "Create Board"}
                             </button>
                         </div>
                     </div>

@@ -2,14 +2,10 @@
 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Image from "next/image";
 import { fetchPins } from "@/lib/store/thunks/pin-thunk";
 import { AppDispatch, RootState } from "@/lib/store";
-
-interface Pin {
-    _id: string;
-    imageUrl: string;
-}
+import { Pin } from "@/lib/types";
+import PinImag from "./PinImg";
 
 const UserHome = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -33,17 +29,7 @@ const UserHome = () => {
                 if (!pin.imageUrl) {
                     return null;
                 }
-                return (
-                    <div key={index} className="masonry-item">
-                        <Image
-                            className="object-cover rounded-2xl w-full"
-                            src={pin.imageUrl}
-                            alt={`Pin ${pin._id}`}
-                            width={500}
-                            height={300}
-                        />
-                    </div>
-                );
+                return <PinImag key={index} pin={pin} />;
             })}
         </div>
     );

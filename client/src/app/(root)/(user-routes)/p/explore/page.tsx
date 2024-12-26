@@ -1,4 +1,4 @@
-import UserExplore from '@/components/user-home/uexplore'
+import UserExplore from '@/components/ui/user-explore/u-explore'
 import React from 'react'
 
 export default function page() {

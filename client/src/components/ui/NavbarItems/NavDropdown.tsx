@@ -36,6 +36,7 @@ export function NavDropdown() {
     const handleLogout = () => {
         dispatch(logout());
         router.push("/");
+        window.location.reload();
     };
 
     const itemClass =
