@@ -10,7 +10,7 @@ import {
 export interface Board {
   _id: string;
   name: string;
-  data: string;
+  data: string[];
 }
 
 interface BoardState {

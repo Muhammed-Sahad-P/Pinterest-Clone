@@ -142,7 +142,7 @@ const CreatePinForm: React.FC = () => {
                                             required
                                         >
                                             <option value="">Choose a board</option>
-                                            {boards?.data?.map((board) => (
+                                            {boards?.map((board) => (
                                                 <option key={board._id} value={board._id}>
                                                     {board.name}
                                                 </option>

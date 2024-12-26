@@ -29,8 +29,8 @@ export const fetchPins = createAsyncThunk(
   "pin/fetchPins",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/pins/");
-      return response.data;
+      const response = await axiosInstance.get("/pins");
+      return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue({

@@ -31,7 +31,7 @@ export const fetchBoards = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/boards");
-      return response.data;
+      return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
         return rejectWithValue({

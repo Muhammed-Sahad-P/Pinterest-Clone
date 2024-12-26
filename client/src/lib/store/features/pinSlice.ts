@@ -7,9 +7,13 @@ import {
   updatePin,
 } from "../thunks/pin-thunk";
 
+interface Pin {
+  _id: string;
+  imageUrl: string;
+}
 interface PinState {
   _id: string;
-  pins: string[];
+  pins: Pin[];
   loading: boolean;
   title: string;
   error: string | null;
