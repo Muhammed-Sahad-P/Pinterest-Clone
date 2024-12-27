@@ -13,4 +13,5 @@ export interface ButtonProps {
 export interface Board {
   _id: string;
   name: string;
+  data?: string[];
 }

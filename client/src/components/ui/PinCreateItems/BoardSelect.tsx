@@ -30,17 +30,19 @@ const BoardSelect: React.FC<BoardSelectProps> = ({
                 <Select
                     onValueChange={(value) => onChange(value)}
                     value={selectedBoard}
-
                 >
                     <SelectTrigger className="w-auto border-gray-300">
                         <SelectValue placeholder="Choose a board" />
                     </SelectTrigger>
                     <SelectContent>
-                        {boards?.map((board) => (
-                            <SelectItem key={board._id} value={board._id}>
-                                {board.name}
-                            </SelectItem>
-                        ))}
+                        {boards?.map((board, index) => {
+                            return (
+                                <SelectItem key={board._id || index} value={board._id}>
+                                    {board.name}
+                                </SelectItem>
+                            )
+                        })
+                        }
                     </SelectContent>
                 </Select>
             )}

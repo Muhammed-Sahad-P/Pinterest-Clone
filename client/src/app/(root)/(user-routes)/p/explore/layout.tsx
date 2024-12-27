@@ -6,7 +6,7 @@ export default function layout({
     children: React.ReactNode;
 }>) {
     return (
-        <div className="flex h-full">
+        <div>
             {children}
         </div>
     );
