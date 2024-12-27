@@ -107,7 +107,7 @@ const CreatePinForm: React.FC = () => {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter the pin title"
+                placeholder="Add a title"
                 required
             />
             <PinFormField
@@ -115,17 +115,17 @@ const CreatePinForm: React.FC = () => {
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Enter the pin description"
+                placeholder="Add a detailed description"
                 required
             />
             <BoardSelect
                 boards={boards}
                 selectedBoard={selectedBoard}
-                onChange={(e) => setSelectedBoard(e.target.value)}
+                onChange={(e) => setSelectedBoard(e)}
                 loading={boardLoading}
             />
             <ImageUpload image={image} onChange={handleImageChange} />
-            <div className="flex justify-between items-center">
+            <div className="flex justify-center gap-2 items-center">
                 <button
                     type="submit"
                     disabled={pinLoading}

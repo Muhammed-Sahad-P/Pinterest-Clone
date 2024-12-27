@@ -11,10 +11,10 @@ interface PinImageWithButtonsProps {
 
 const PinImag: React.FC<PinImageWithButtonsProps> = ({ pin }) => {
     return (
-        <div className="relative group mt-4">
+        <div className="relative group cursor-pointer">
             <div className="relative w-full">
                 <Image
-                    className="object-cover rounded-2xl w-full"
+                    className="object-cover rounded-2xl w-full mt-2"
                     src={pin.imageUrl}
                     alt={`Pin ${pin._id}`}
                     width={500}

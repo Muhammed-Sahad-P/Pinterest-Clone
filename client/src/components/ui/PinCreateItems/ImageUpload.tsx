@@ -13,7 +13,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ image, onChange }) => {
                 <Image
                     src={URL.createObjectURL(image)}
                     alt="Selected Preview"
-                    className="w-full h-64 object-cover rounded-md"
+                    className="w-64 h-64 object-contain"
                     width={400}
                     height={400}
                 />
@@ -22,7 +22,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ image, onChange }) => {
                 type="file"
                 accept="image/*"
                 onChange={onChange}
-                className="mt-1 block w-auto"
+                className="mt-1 block w-auto ml-4"
                 required
             />
         </div>
