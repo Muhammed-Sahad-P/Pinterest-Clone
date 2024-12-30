@@ -3,7 +3,9 @@ import { Board } from "@/lib/types";
 import {
     Select,
     SelectContent,
+    SelectGroup,
     SelectItem,
+    SelectLabel,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
@@ -27,22 +29,19 @@ const BoardSelect: React.FC<BoardSelectProps> = ({
             {loading ? (
                 <p className="text-sm text-gray-500">Loading boards...</p>
             ) : (
-                <Select
-                    onValueChange={(value) => onChange(value)}
-                    value={selectedBoard}
-                >
+                <Select onValueChange={(value) => onChange(value)} value={selectedBoard}>
                     <SelectTrigger className="w-auto border-gray-300">
                         <SelectValue placeholder="Choose a board" />
                     </SelectTrigger>
-                    <SelectContent>
-                        {boards?.map((board, index) => {
-                            return (
-                                <SelectItem key={board._id || index} value={board._id}>
+                    <SelectContent className="max-h-48 overflow-y-auto">
+                        <SelectGroup>
+                            <SelectLabel>Boards</SelectLabel>
+                            {boards?.map((board, index) => (
+                                <SelectItem key={board._id || `${board._id}-${index}`} value={board._id}>
                                     {board.name}
                                 </SelectItem>
-                            )
-                        })
-                        }
+                            ))}
+                        </SelectGroup>
                     </SelectContent>
                 </Select>
             )}

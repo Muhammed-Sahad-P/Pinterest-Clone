@@ -8,6 +8,10 @@ export function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
   const pathname = url.pathname;
 
+  if (token && pathname === "/") {
+    return NextResponse.redirect(new URL("/u/home", req.url));
+  }
+
   switch (true) {
     case token && pathname === "/":
       url.pathname = "/u/home";
