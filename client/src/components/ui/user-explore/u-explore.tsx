@@ -1,6 +1,7 @@
 "use client";
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
+import { Button } from '../button';
 
 export default function UserExplore() {
     const [currentDate, setCurrentDate] = useState('');
@@ -79,6 +80,9 @@ export default function UserExplore() {
                     </div>
                 </div>
                 <div className="bg-white overflow-hidden"></div>
+            </div>
+            <div className='flex justify-center items-center mt-10'>
+                <Button className='bg-[#E9E9E9] text-black rounded-2xl hover:text-white' onClick={() => { window.location.href = "/u/home" }}>Go to home feed</Button>
             </div>
         </div>
     );

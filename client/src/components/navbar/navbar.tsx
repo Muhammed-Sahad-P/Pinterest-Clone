@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
         return null;
     }
 
-    const isDesktopMenuPage = ["/u/home", "/p/watch", "/p/explore", "/p/today", "/u/create"].includes(pathname);
+    const isDesktopMenuPage = ["/u/home", "/p/watch", "/p/explore", "/p/today", "/u/create", "/u/profile"].includes(pathname);
 
     return (
         <nav className="bg-white dark:bg-darkBg py-6 z-50 sticky top-0">

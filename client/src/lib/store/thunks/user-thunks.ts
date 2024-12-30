@@ -69,7 +69,7 @@ export const fetchUserProfile = createAsyncThunk(
     const userDetails = Cookies.get("user");
     const user = JSON.parse(userDetails || "");
     try {
-      const response = await axiosInstance.get(`/me/${user.id}`, {
+      const response = await axiosInstance.get(`/profile/${user.id}`, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -80,6 +80,42 @@ export const fetchUserProfile = createAsyncThunk(
         return rejectWithValue({
           message:
             error.response?.data.message || "Failed to fetch user profile",
+        });
+      }
+      return rejectWithValue({ message: "An unknown error occurred" });
+    }
+  }
+);
+
+// Update User Profile
+export const updateUserProfile = createAsyncThunk(
+  "user/updateUserProfile",
+  async (
+    {
+      username,
+      email,
+      profilePicture,
+    }: { username: string; email: string; profilePicture?: string },
+    { rejectWithValue }
+  ) => {
+    const userDetails = Cookies.get("user");
+    const user = JSON.parse(userDetails || "");
+    try {
+      const response = await axiosInstance.put(
+        `/profile/${user.id}`,
+        { username, email, profilePicture },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue({
+          message:
+            error.response?.data.message || "Failed to update user profile",
         });
       }
       return rejectWithValue({ message: "An unknown error occurred" });

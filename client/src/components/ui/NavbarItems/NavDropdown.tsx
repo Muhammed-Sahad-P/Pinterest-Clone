@@ -14,6 +14,7 @@ import { AppDispatch, RootState } from "@/lib/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import Link from "next/link";
 
 export function NavDropdown() {
     const dispatch = useDispatch<AppDispatch>();
@@ -47,9 +48,11 @@ export function NavDropdown() {
 
     return (
         <DropdownMenu>
-            <div className={avatarClass}>
-                {typeof firstLetter === "string" ? firstLetter : <FaUserCircle />}
-            </div>
+            <Link href="/u/profile">
+                <div className={avatarClass}>
+                    {typeof firstLetter === "string" ? firstLetter : <FaUserCircle />}
+                </div>
+            </Link>
             <DropdownMenuTrigger asChild>
                 <p className="text-gray-700 text-[20px] rounded-full hover:bg-[#E9E9E9] font-bold transition duration-200">
                     <MdKeyboardArrowDown />

@@ -1,12 +1,33 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser, signup } from "../thunks/user-thunks";
+import { loginUser, signup, updateUserProfile } from "../thunks/user-thunks";
 import Cookies from "js-cookie";
-import { forgotPassword, resetPassword } from "../thunks/user-thunks";
+import {
+  forgotPassword,
+  resetPassword,
+  fetchUserProfile,
+} from "../thunks/user-thunks";
+import { User } from "@/types/user";
+
+interface UserProfile {
+  _id?: string;
+  email: string;
+  userName?: string;
+  firstName?: string;
+  lastName?: string;
+  image?: string;
+  bio?: string;
+  name?: string;
+  boards?: string[];
+  phoneNumber?: string;
+}
 
 interface UserState {
   currentAccount: string | null;
-  user: { email: string; password: string } | null;
+  user: User | null;
+  profilePicture: string | null;
+  email: string | null;
   loading: boolean;
+  userProfile: UserProfile | null;
   successMessage: string | null;
   loggedUser: { email: string; id: string; token: string } | null;
   error: string | null;
@@ -17,8 +38,11 @@ interface UserState {
 const initialState: UserState = {
   currentAccount: null,
   user: null,
+  email: null,
+  profilePicture: null,
   loading: false,
   error: null,
+  userProfile: null,
   successMessage: null,
   loggedUser: null,
   forgetEmail: null,
@@ -37,6 +61,9 @@ const userSlice = createSlice({
     },
     setLoading: (state, action) => {
       state.loading = action.payload;
+    },
+    setUserProfile: (state, action) => {
+      state.userProfile = action.payload;
     },
     clearMessages: (state) => {
       state.successMessage = null;
@@ -79,6 +106,36 @@ const userSlice = createSlice({
         state.loading = false;
         state.error =
           (action.payload as { message: string }).message || "Login failed";
+      })
+      .addCase(fetchUserProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userProfile = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchUserProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          (action.payload as { message: string })?.message ||
+          "Fetch user profile failed";
+      })
+      .addCase(updateUserProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userProfile = action.payload;
+        state.error = null;
+      })
+      .addCase(updateUserProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          (action.payload as { message: string })?.message ||
+          "Update user profile failed";
       })
       .addCase(forgotPassword.pending, (state) => {
         state.loading = true;
