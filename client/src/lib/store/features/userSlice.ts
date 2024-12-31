@@ -12,6 +12,8 @@ interface UserProfile {
   _id?: string;
   email: string;
   userName?: string;
+  followers?: string[];
+  following?: string[];
   firstName?: string;
   lastName?: string;
   image?: string;
@@ -24,6 +26,8 @@ interface UserProfile {
 interface UserState {
   currentAccount: string | null;
   user: User | null;
+  followers: string[];
+  following: string[];
   profilePicture: string | null;
   email: string | null;
   loading: boolean;
@@ -38,6 +42,8 @@ interface UserState {
 const initialState: UserState = {
   currentAccount: null,
   user: null,
+  followers: [],
+  following: [],
   email: null,
   profilePicture: null,
   loading: false,

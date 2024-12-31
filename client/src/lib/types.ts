@@ -1,5 +1,7 @@
 export interface Pin {
+  pinId: { imageUrl: string };
   _id: string;
+  title?: string;
   imageUrl: string;
 }
 

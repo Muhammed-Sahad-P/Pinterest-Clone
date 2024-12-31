@@ -6,6 +6,8 @@ export interface User {
   profilePicture: string;
   bio?: string;
   token: string;
+  followers?: string[];
+  following?: string[];
 }
 
 export interface UserData extends User {

@@ -7,13 +7,14 @@ import {
   updatePin,
 } from "../thunks/pin-thunk";
 
-interface Pin {
+export interface Pin {
   _id: string;
   imageUrl: string;
 }
-interface PinState {
+export interface PinState {
   _id: string;
   pins: Pin[];
+  savedPins: Pin[];
   loading: boolean;
   title: string;
   error: string | null;
@@ -24,6 +25,7 @@ interface PinState {
 const initialState: PinState = {
   _id: "",
   pins: [],
+  savedPins: [],
   loading: false,
   error: null,
   title: "",
