@@ -1,9 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  savePin,
-  unSavePin,
-  fetchSavedPins,
-} from "@/lib/store/thunks/save-thunk";
+import { saveUnsavePin, fetchSavedPins } from "@/lib/store/thunks/save-thunk";
 import { Pin } from "@/lib/types";
 interface SaveState {
   savedPins: Pin[];
@@ -23,27 +19,14 @@ const saveSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(savePin.pending, (state) => {
+      .addCase(saveUnsavePin.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(savePin.fulfilled, (state, action) => {
+      .addCase(saveUnsavePin.fulfilled, (state, action) => {
         state.isLoading = false;
         state.savedPins.push(action.payload.pinId);
       })
-      .addCase(savePin.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(unSavePin.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(unSavePin.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.savedPins = state.savedPins.filter(
-          (pinId) => pinId !== action.payload.pinId
-        );
-      })
-      .addCase(unSavePin.rejected, (state, action) => {
+      .addCase(saveUnsavePin.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

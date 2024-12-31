@@ -7,7 +7,7 @@ import ActionButton from "@/components/ui/user-home/ActionButton";
 import { Pin } from "@/lib/types";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/lib/store";
-import { savePin } from "@/lib/store/thunks/save-thunk";
+import { saveUnsavePin } from "@/lib/store/thunks/save-thunk";
 import { toast } from "sonner";
 
 interface PinImageWithButtonsProps {
@@ -19,13 +19,13 @@ const PinImag: React.FC<PinImageWithButtonsProps> = ({ pin }) => {
 
     const handleSavePin = async () => {
         try {
-            const response = await dispatch(savePin({ pinId: pin._id })).unwrap();
-            console.log(response);
+            const response = await dispatch(saveUnsavePin({ pinId: pin._id })).unwrap();
             toast(response.message);
-        } catch (error: any) {
-            toast(error.message);
+        } catch (error) {
+            toast.error((error as { message: string }).message || "Pin already saved");
         }
     };
+
 
 
     return (
