@@ -3,6 +3,7 @@ export interface Pin {
   _id: string;
   title?: string;
   imageUrl: string;
+  createdAt: string;
 }
 
 export interface ButtonProps {

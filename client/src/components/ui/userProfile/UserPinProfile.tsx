@@ -58,20 +58,23 @@ export default function UserPinProfile() {
             </div>
 
             <div className="mt-6 flex flex-wrap gap-4">
-                {pins.length > 0 ? (
-                    pins.map((pin: Pin) => (
+                {pins?.length > 0 ? (
+                    pins?.map((pin: Pin, i) => (
                         <div
-                            key={pin._id}
+                            key={i}
                             className="relative group overflow-hidden rounded-2xl bg-gray-100 shadow-lg hover:shadow-2xl transition-shadow duration-300 w-[150px] h-[275px]"
                         >
                             <div className="relative w-full h-full bg-white rounded-lg shadow-lg overflow-hidden">
-                                <Image
-                                    className="w-full h-full object-cover"
-                                    src={pin.pinId.imageUrl}
-                                    alt="Pin"
-                                    width={300}
-                                    height={300}
-                                />
+                                {pin?.pinId && pin.pinId.imageUrl && (
+
+                                    <Image
+                                        className="w-full h-full object-cover"
+                                        src={pin?.pinId.imageUrl}
+                                        alt="Pin"
+                                        width={300}
+                                        height={300}
+                                    />
+                                )}
                                 <div className="absolute top-4 right-3 hidden group-hover:block">
                                     <ActionButton className="bg-[#E60023] hover:bg-[#E60023]/80 text-white px-4 py-2 rounded-full text-sm sm:text-base">
                                         Save

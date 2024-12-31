@@ -37,7 +37,7 @@ const BoardSelect: React.FC<BoardSelectProps> = ({
                         <SelectGroup>
                             <SelectLabel>Boards</SelectLabel>
                             {boards?.map((board, index) => (
-                                <SelectItem key={board._id || `${board._id}-${index}`} value={board._id}>
+                                <SelectItem key={index} value={board._id}>
                                     {board.name}
                                 </SelectItem>
                             ))}

@@ -1,15 +1,33 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import { MdKeyboardArrowDown, MdOutlineFileUpload } from "react-icons/md";
 import { SlOptions } from "react-icons/sl";
 import ActionButton from "@/components/ui/user-home/ActionButton";
 import { Pin } from "@/lib/types";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/lib/store";
+import { savePin } from "@/lib/store/thunks/save-thunk";
+import { toast } from "sonner";
 
 interface PinImageWithButtonsProps {
     pin: Pin;
 }
 
 const PinImag: React.FC<PinImageWithButtonsProps> = ({ pin }) => {
+    const dispatch = useDispatch<AppDispatch>();
+
+    const handleSavePin = async () => {
+        try {
+            const response = await dispatch(savePin({ pinId: pin._id })).unwrap();
+            console.log(response);
+            toast(response.message);
+        } catch (error: any) {
+            toast(error.message);
+        }
+    };
+
+
     return (
         <div className="relative group cursor-pointer">
             <div className="relative w-full">
@@ -33,6 +51,7 @@ const PinImag: React.FC<PinImageWithButtonsProps> = ({ pin }) => {
                 <div className="absolute top-4 right-3 group-hover:block hidden">
                     <ActionButton
                         className="bg-[#E60023] hover:bg-[#E60023]/80 text-white px-4 py-3 rounded-full text-sm sm:text-base"
+                        onClick={handleSavePin}
                     >
                         Save
                     </ActionButton>
