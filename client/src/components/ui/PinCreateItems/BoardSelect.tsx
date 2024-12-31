@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Board } from "@/lib/types";
 import {
     Select,
@@ -9,12 +11,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import CreateBoardModal from "./CreateBoardModal";
 
 interface BoardSelectProps {
     boards: Board[];
     selectedBoard: string;
     onChange: (value: string) => void;
     loading: boolean;
+    onCreateBoard: (name: string, description: string) => Promise<void>;
+    boardLoading: boolean;
 }
 
 const BoardSelect: React.FC<BoardSelectProps> = ({
@@ -22,28 +27,70 @@ const BoardSelect: React.FC<BoardSelectProps> = ({
     selectedBoard,
     onChange,
     loading,
+    onCreateBoard,
+    boardLoading,
 }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newBoardName, setNewBoardName] = useState("");
+    const [newBoardDescription, setNewBoardDescription] = useState("");
+
+    const handleCreateBoard = async () => {
+        if (newBoardName.trim() && newBoardDescription.trim()) {
+            await onCreateBoard(newBoardName, newBoardDescription);
+            setIsModalOpen(false);
+            setNewBoardName("");
+            setNewBoardDescription("");
+        }
+    };
+
     return (
-        <div className="flex justify-center items-center">
-            <label className="text-sm text-black mr-2">Board</label>
+        <div className="flex flex-col w-full max-w-md mx-auto space-y-2">
+            <label className="text-sm font-semibold text-gray-700">Board</label>
             {loading ? (
                 <p className="text-sm text-gray-500">Loading boards...</p>
             ) : (
-                <Select onValueChange={(value) => onChange(value)} value={selectedBoard}>
-                    <SelectTrigger className="w-auto border-gray-300">
-                        <SelectValue placeholder="Choose a board" />
-                    </SelectTrigger>
-                    <SelectContent className="max-h-48 overflow-y-auto">
-                        <SelectGroup>
-                            <SelectLabel>Boards</SelectLabel>
-                            {boards?.map((board, index) => (
-                                <SelectItem key={index} value={board._id}>
-                                    {board.name}
-                                </SelectItem>
-                            ))}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
+                <>
+                    <Select onValueChange={(value) => onChange(value)} value={selectedBoard}>
+                        <SelectTrigger
+                            className="w-full py-6 px-4 border border-gray-300 rounded-2xl shadow-sm focus:ring-red-500 focus:border-red-500 text-gray-700 placeholder-gray-400 sm:text-sm"
+                        >
+                            <SelectValue placeholder="Choose a board" />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-48 overflow-y-auto rounded-lg shadow-md border border-gray-200">
+                            <SelectGroup>
+                                <SelectLabel className="text-gray-500">Boards</SelectLabel>
+                                {boards?.map((board, index) => (
+                                    <SelectItem
+                                        key={index}
+                                        value={board._id}
+                                        className="py-2 px-3 hover:bg-gray-100 rounded-md cursor-pointer"
+                                    >
+                                        {board.name}
+                                    </SelectItem>
+                                ))}
+                                <div className="py-2 px-3 border-t border-gray-200">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsModalOpen(true)}
+                                        className="text-[#E60023] text-base hover:underline"
+                                    >
+                                        + Create New Board
+                                    </button>
+                                </div>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                    <CreateBoardModal
+                        isModalOpen={isModalOpen}
+                        setIsModalOpen={setIsModalOpen}
+                        newBoardName={newBoardName}
+                        setNewBoardName={setNewBoardName}
+                        newBoardDescription={newBoardDescription}
+                        setNewBoardDescription={setNewBoardDescription}
+                        handleCreateBoard={handleCreateBoard}
+                        boardLoading={boardLoading}
+                    />
+                </>
             )}
         </div>
     );

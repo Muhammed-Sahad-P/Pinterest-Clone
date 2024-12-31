@@ -1,5 +1,4 @@
-"use client"
-
+"use client";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/store";
@@ -38,6 +37,7 @@ const CreatePinForm: React.FC = () => {
         }
     };
 
+    const handleImageRemove = () => setImage(null);
     const handleCreateBoard = async () => {
         if (!newBoardName.trim() || !newBoardDescription.trim()) {
             toast("Please provide both board name and description", {
@@ -99,60 +99,77 @@ const CreatePinForm: React.FC = () => {
 
     if (!isMounted) return null;
 
-
     return (
-        <form onSubmit={handlePinSubmit} className="space-y-6">
-            <PinFormField
-                label="Title"
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Add a title"
-                required
-            />
-            <PinFormField
-                label="Description"
-                type="text"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Add a detailed description"
-                required
-            />
-            <BoardSelect
-                boards={boards}
-                selectedBoard={selectedBoard}
-                onChange={(e) => setSelectedBoard(e)}
-                loading={boardLoading}
-            />
-            <ImageUpload image={image} onChange={handleImageChange} />
-            <div className="flex justify-center gap-2 items-center">
+        <div className="space-y-10">
+            <div className="py-4 px-6 border border-gray-200 flex items-center justify-between">
+                <h1 className="text-2xl font-semibold text-black">Create Pin</h1>
                 <button
                     type="submit"
+                    form="create-pin-form"
                     disabled={pinLoading}
-                    className="py-2 px-4 bg-[#E60023] text-white rounded-md hover:bg-[#E60023]/80"
+                    className="py-2 px-4 bg-[#E60023] text-white rounded-full hover:bg-[#E60023]/80"
                 >
-                    {pinLoading ? "Creating Pin..." : "Create Pin"}
-                </button>
-                <button
-                    type="button"
-                    onClick={() => setIsModalOpen(true)}
-                    className="py-2 px-4 bg-gray-500 text-white rounded-md hover:bg-gray-600"
-                >
-                    Create New Board
+                    {pinLoading ? "Publishing..." : "Publish"}
                 </button>
             </div>
-
-            <CreateBoardModal
-                isModalOpen={isModalOpen}
-                setIsModalOpen={setIsModalOpen}
-                newBoardName={newBoardName}
-                setNewBoardName={setNewBoardName}
-                newBoardDescription={newBoardDescription}
-                setNewBoardDescription={setNewBoardDescription}
-                handleCreateBoard={handleCreateBoard}
-                boardLoading={boardLoading}
-            />
-        </form>
+            <form
+                id="create-pin-form"
+                onSubmit={handlePinSubmit}
+                className="flex flex-col md:flex-row md:space-x-4 space-y-6 md:space-y-0"
+            >
+                <div className="md:w-1/3 flex-shrink-0">
+                    <ImageUpload image={image} onChange={handleImageChange} onRemove={handleImageRemove} />
+                </div>
+                <div className="flex-grow space-y-6">
+                    <PinFormField
+                        label="Title"
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="Add a title"
+                        required
+                    />
+                    <PinFormField
+                        className="h-32"
+                        label="Description"
+                        type="text"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Add a detailed description"
+                        required
+                    />
+                    <BoardSelect
+                        boards={boards}
+                        selectedBoard={selectedBoard}
+                        onChange={(value) => setSelectedBoard(value)}
+                        loading={boardLoading}
+                        onCreateBoard={async (name, description) => {
+                            const response = await dispatch(
+                                createBoard({ name, description })
+                            );
+                            if (response.meta.requestStatus === "fulfilled") {
+                                dispatch(fetchBoards());
+                                setSelectedBoard(response.payload._id);
+                                toast("Board created successfully!", {
+                                    description: `Board "${name}" has been created.`,
+                                });
+                            }
+                        }}
+                        boardLoading={boardLoading}
+                    />
+                </div>
+                <CreateBoardModal
+                    isModalOpen={isModalOpen}
+                    setIsModalOpen={setIsModalOpen}
+                    newBoardName={newBoardName}
+                    setNewBoardName={setNewBoardName}
+                    newBoardDescription={newBoardDescription}
+                    setNewBoardDescription={setNewBoardDescription}
+                    handleCreateBoard={handleCreateBoard}
+                    boardLoading={boardLoading}
+                />
+            </form>
+        </div>
     );
 };
 
