@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { pid } from "process";
 
 export interface ISavedPin extends Document {
   pinId: mongoose.Types.ObjectId;
@@ -9,7 +8,7 @@ export interface ISavedPin extends Document {
 const SavedPinSchema: Schema = new mongoose.Schema(
   {
     pinId: { type: mongoose.Schema.Types.ObjectId, ref: "Pin", required: true },
-    savedBy: { type: mongoose.Types.ObjectId, ref: "Uer", required: true },
+    savedBy: { type: mongoose.Types.ObjectId, ref: "User", required: true },
   },
   { timestamps: true }
 );
