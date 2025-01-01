@@ -1,8 +1,11 @@
-import { optional, z } from "zod";
+import { z } from "zod";
 
 export const RegisterSchema = z.object({
   email: z.string().email("Invalid email"),
-  password: z.string().min(6, "Password must be at least 6 characters long"),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters long")
+    .optional(),
   birthdate: z
     .string()
     .refine((val) => !isNaN(Date.parse(val)), {
@@ -16,7 +19,10 @@ export const RegisterSchema = z.object({
 
 export const LoginSchema = z.object({
   email: z.string().email("Invalid email"),
-  password: z.string().min(6, "Password must be at least 6 characters long"),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters long")
+    .optional(),
 });
 
 export const EditUserSchema = z.object({

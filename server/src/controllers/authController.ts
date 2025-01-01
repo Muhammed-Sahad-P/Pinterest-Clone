@@ -25,7 +25,7 @@ const register = async (req: Request, res: Response) => {
     throw new CustomError("User already exists", 400);
   }
 
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const hashedPassword = await bcrypt.hash(password || "", saltRounds);
 
   const user = new User({
     email,
@@ -53,7 +53,7 @@ const login = async (req: Request, res: Response) => {
     throw new CustomError("User not found", 404);
   }
 
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password || "", user.password || "");
   if (!isMatch) {
     throw new CustomError("Invalid credentials", 401);
   }
@@ -71,6 +71,53 @@ const login = async (req: Request, res: Response) => {
   res
     .status(200)
     .json(new StandardResponse("User logged in successfully", response));
+};
+
+//Google Controller
+const googleLogin = async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  if (!email) {
+    throw new CustomError("Email is required", 400);
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    const newUser = new User({ email });
+    const savedUser = await newUser.save();
+    const token = jwt.sign(
+      { id: savedUser._id },
+      process.env.JWT_SECRET_KEY || "",
+      {
+        expiresIn: "7d",
+      }
+    );
+
+    const response = {
+      email: savedUser.email,
+      id: savedUser._id,
+      token,
+    };
+
+    res
+      .status(201)
+      .json(new StandardResponse("User logged in successfully", response));
+  } else {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY || "", {
+      expiresIn: "7d",
+    });
+
+    const response = {
+      email: user.email,
+      id: user._id,
+      token,
+    };
+
+    res
+      .status(200)
+      .json(new StandardResponse("User logged in successfully", response));
+  }
 };
 
 //forgot password
@@ -147,4 +194,4 @@ const resetPassword = async (req: Request, res: Response) => {
   res.status(200).json(new StandardResponse("Password reset successfully"));
 };
 
-export { register, login, forgotPassword, resetPassword };
+export { register, login, forgotPassword, resetPassword, googleLogin };
