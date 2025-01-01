@@ -44,10 +44,11 @@ const BoardSelect: React.FC<BoardSelectProps> = ({
     };
 
     return (
-        <div className="flex flex-col w-full max-w-md mx-auto space-y-2">
-            <label className="text-sm font-semibold text-gray-700">Board</label>
+        <div className="flex flex-col w-full max-w-lg mx-auto space-y-2 px-4 sm:px-6">
+            <label className="text-sm text-black md:text-base">Board</label>
+
             {loading ? (
-                <p className="text-sm text-gray-500">Loading boards...</p>
+                <p className="text-sm text-black md:text-base">Loading boards...</p>
             ) : (
                 <>
                     <Select onValueChange={(value) => onChange(value)} value={selectedBoard}>
@@ -56,14 +57,16 @@ const BoardSelect: React.FC<BoardSelectProps> = ({
                         >
                             <SelectValue placeholder="Choose a board" />
                         </SelectTrigger>
-                        <SelectContent className="max-h-48 overflow-y-auto rounded-lg shadow-md border border-gray-200">
+                        <SelectContent className="max-h-48 overflow-y-auto rounded-lg shadow-md border border-gray-200 sm:max-h-48">
                             <SelectGroup>
-                                <SelectLabel className="text-gray-500">Boards</SelectLabel>
+                                <SelectLabel className="text-black md:text-sm lg:text-base">
+                                    Boards
+                                </SelectLabel>
                                 {boards?.map((board, index) => (
                                     <SelectItem
                                         key={index}
                                         value={board._id}
-                                        className="py-2 px-3 hover:bg-gray-100 rounded-md cursor-pointer"
+                                        className="py-2 px-3 hover:bg-gray-100 rounded-md cursor-pointer text-sm sm:text-base"
                                     >
                                         {board.name}
                                     </SelectItem>
@@ -72,7 +75,7 @@ const BoardSelect: React.FC<BoardSelectProps> = ({
                                     <button
                                         type="button"
                                         onClick={() => setIsModalOpen(true)}
-                                        className="text-[#E60023] text-base hover:underline"
+                                        className="text-[#E60023] text-sm sm:text-base hover:underline"
                                     >
                                         + Create New Board
                                     </button>

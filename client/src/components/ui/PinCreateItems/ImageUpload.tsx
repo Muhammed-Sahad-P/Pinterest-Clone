@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { MdDelete } from "react-icons/md";
+import { RiUploadCloudFill } from "react-icons/ri";
 
 interface ImageUploadProps {
     image: File | null;
@@ -10,10 +11,13 @@ interface ImageUploadProps {
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ image, onChange, onRemove }) => {
     return (
-        <div className="flex flex-col items-center space-y-4 w-full">
+        <div className="flex justify-center items-center w-full">
             {!image && (
-                <div className="relative w-[300px] h-[400px] bg-gray-200 border border-gray-300 rounded-2xl flex justify-center items-center text-gray-500">
-                    <span>No file chosen</span>
+                <div className="relative w-[250px] h-[350px] sm:w-[300px] sm:h-[400px] bg-gray-200 border border-gray-300 rounded-2xl flex flex-col justify-center items-center text-gray-500">
+                    <div className="text-4xl mb-2">
+                        <RiUploadCloudFill className="text-black" />
+                    </div>
+                    <p className="font-sm text-black">Choose a file</p>
                     <input
                         type="file"
                         accept="image/*"
@@ -21,10 +25,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ image, onChange, onRemove }) 
                         className="absolute inset-0 opacity-0 cursor-pointer"
                         required
                     />
+                    <p className="absolute bottom-3 text-center text-xs sm:text-sm text-black px-4">
+                        We recommend using high-quality .jpg files less than 20 MB.
+                    </p>
                 </div>
             )}
             {image && (
-                <div className="relative w-[300px] h-[400px]">
+                <div className="relative w-[250px] h-[350px] sm:w-[300px] sm:h-[400px]">
                     <Image
                         src={URL.createObjectURL(image)}
                         alt="Selected Preview"

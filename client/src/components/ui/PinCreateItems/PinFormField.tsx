@@ -20,13 +20,13 @@ const PinFormField: React.FC<FormFieldProps> = ({
     className,
 }) => {
     return (
-        <div className="flex flex-col w-full max-w-md mx-auto space-y-2">
-            <label className="text-sm font-semibold text-gray-700">{label}</label>
+        <div className="flex flex-col w-full max-w-lg mx-auto space-y-2 px-4 sm:px-6">
+            <label className="text-sm text-black sm:text-base">{label}</label>
             <input
                 type={type}
                 value={value}
                 onChange={onChange}
-                className={`block w-full py-3 px-4 border border-gray-300 rounded-2xl shadow-sm focus:ring-red-500 focus:border-red-500 text-gray-700 placeholder-gray-400 sm:text-sm ${className}`}
+                className={`block w-full py-3 px-4 border border-gray-300 rounded-xl shadow-sm focus:ring-red-500 focus:border-red-500 text-gray-700 placeholder-gray-400 sm:text-sm md:text-base ${className}`}
                 placeholder={placeholder}
                 required={required}
             />
