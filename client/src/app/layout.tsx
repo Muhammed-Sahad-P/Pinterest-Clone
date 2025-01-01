@@ -2,19 +2,24 @@ import Navbar from '@/components/navbar/navbar';
 import './globals.css';
 import StoreProvider from "@/lib/store/store-provider";
 import { Toaster } from "@/components/ui/sonner"
-
-export default function RootLayout({
+import SessionProvider from '@/providers/authProvider';
+import { getServerSession } from 'next-auth';
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const session = await getServerSession();
   return (
     <html lang="en">
       <body>
         <StoreProvider>
-          <Navbar />
-          {children}
-          <Toaster />
+          <SessionProvider session={session}>
+            <Navbar />
+            {children}
+            <Toaster />
+          </SessionProvider>
         </StoreProvider>
       </body>
     </html>

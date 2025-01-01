@@ -1,16 +1,18 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { clearMessages, setForgetEmail } from "@/lib/store/features/userSlice";
-import { loginUser } from "@/lib/store/thunks/user-thunks";
+import { googleLogin, loginUser } from "@/lib/store/thunks/user-thunks";
 import { AppDispatch, RootState } from "@/lib/store";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { signIn, useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 export default function Signin() {
     const [showPassword, setShowPassword] = useState(false);
@@ -36,6 +38,25 @@ export default function Signin() {
         dispatch(setForgetEmail(email));
         router.push("/forgot-password");
     };
+
+    const { data: session } = useSession()
+
+    const handleGoogleLogin = () => {
+        signIn("google");
+    }
+
+
+    useEffect(() => {
+        if (session) {
+            const email = session?.user?.email;
+            if (email) {
+                dispatch(googleLogin({ email }));
+            } else {
+                toast("Google login session is missing required fields.");
+            }
+        }
+    }, [session, dispatch]);
+
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -162,7 +183,7 @@ export default function Signin() {
                     <button
                         type="button"
                         className="w-full bg-white border border-gray-300 text-black py-2 rounded-full hover:bg-gray-100 mb-2 text-sm"
-                        onClick={() => alert("Google Sign-In coming soon!")}
+                        onClick={handleGoogleLogin}
                     >
                         <FcGoogle size={25} className="mr-2 float-end" />
                         Continue with Google

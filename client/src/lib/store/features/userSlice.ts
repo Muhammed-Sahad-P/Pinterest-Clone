@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser, signup, updateUserProfile } from "../thunks/user-thunks";
+import {
+  loginUser,
+  signup,
+  updateUserProfile,
+  googleLogin,
+} from "../thunks/user-thunks";
 import Cookies from "js-cookie";
 import {
   forgotPassword,
@@ -109,6 +114,24 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          (action.payload as { message: string }).message || "Login failed";
+      })
+      .addCase(googleLogin.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(googleLogin.fulfilled, (state, action) => {
+        state.loggedUser = {
+          email: action.payload.email,
+          id: action.payload._id,
+          token: action.payload.token,
+        };
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(googleLogin.rejected, (state, action) => {
         state.loading = false;
         state.error =
           (action.payload as { message: string }).message || "Login failed";

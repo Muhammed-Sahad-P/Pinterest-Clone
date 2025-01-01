@@ -10,7 +10,7 @@ export const signup = createAsyncThunk(
     userData: {
       email: string;
       password: string;
-      birthdate: string | Date;
+      birthdate?: string | Date;
     },
     { rejectWithValue }
   ) => {
@@ -24,6 +24,36 @@ export const signup = createAsyncThunk(
         return rejectWithValue({ message: errorMessage });
       }
       return rejectWithValue({ message: "Network or unknown error occurred" });
+    }
+  }
+);
+
+//google login/signup
+export const googleLogin = createAsyncThunk(
+  "user/googleLogin",
+  async ({ email }: { email: string }, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.post("/auth/googlelogin", { email });
+      const userData = data.data;
+      Cookies.set(
+        "user",
+        JSON.stringify({
+          email: userData.email,
+          id: userData.id,
+          token: userData.token,
+        }),
+        {
+          expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        }
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue({
+          message: error.response?.data?.message || "Login failed",
+        });
+      }
+      return rejectWithValue({ message: "An unknown error occurred" });
     }
   }
 );

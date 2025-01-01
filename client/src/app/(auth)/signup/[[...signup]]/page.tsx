@@ -7,9 +7,11 @@ import { FcGoogle } from "react-icons/fc";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { clearMessages } from "@/lib/store/features/userSlice";
-import { signup } from "@/lib/store/thunks/user-thunks";
+import { googleLogin, signup } from "@/lib/store/thunks/user-thunks";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 interface FormValues {
     email: string;
@@ -73,6 +75,31 @@ export default function Signup() {
         validationSchema: SignupSchema,
         onSubmit: handleSubmit,
     });
+
+    const { data: session } = useSession()
+
+
+    const handleGoogleLogin = () => {
+        signIn("google");
+    }
+
+
+    useEffect(() => {
+        if (session) {
+            const fetchData = async () => {
+
+                const email = session?.user?.email;
+                if (email) {
+                    await dispatch(googleLogin({ email })).unwrap();
+                    router.push('/u/home');
+                } else {
+                    toast("Google login session is missing required fields.");
+                }
+            }
+            fetchData()
+        }
+    }, [session, dispatch, router]);
+
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -185,7 +212,7 @@ export default function Signup() {
                         <button
                             type="button"
                             className="w-full bg-white border border-gray-300 text-black py-2 rounded-full hover:bg-gray-100 mb-2 text-sm"
-                            onClick={() => alert("Google Sign-In coming soon!")}
+                            onClick={handleGoogleLogin}
                         >
                             <FcGoogle size={25} className="mr-2 float-end" />
                             Continue with Google
@@ -227,7 +254,6 @@ export default function Signup() {
                 <div className="bg-[#E9E9E9] py-2 w-full rounded-b-3xl mt-2 flex-shrink-0">
                     <button
                         className="text-black font-medium text-base w-full py-2"
-                        onClick={() => alert("Switch to Business Account!")}
                     >
                         Create a free business account
                     </button>

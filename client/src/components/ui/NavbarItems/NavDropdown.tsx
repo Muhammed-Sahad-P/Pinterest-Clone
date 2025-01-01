@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 export function NavDropdown() {
     const dispatch = useDispatch<AppDispatch>();
@@ -35,6 +36,7 @@ export function NavDropdown() {
     const firstLetter = email ? email.charAt(0).toUpperCase() : <FaUserCircle />;
 
     const handleLogout = () => {
+        signOut();
         dispatch(logout());
         router.push("/");
         window.location.reload();
