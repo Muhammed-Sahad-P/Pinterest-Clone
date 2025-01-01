@@ -48,14 +48,19 @@ export default function Signin() {
 
     useEffect(() => {
         if (session) {
-            const email = session?.user?.email;
-            if (email) {
-                dispatch(googleLogin({ email }));
-            } else {
-                toast("Google login session is missing required fields.");
+            const fetchData = async () => {
+
+                const email = session?.user?.email;
+                if (email) {
+                    await dispatch(googleLogin({ email })).unwrap();
+                    router.push('/u/home');
+                } else {
+                    toast("Google login session is missing required fields.");
+                }
             }
+            fetchData()
         }
-    }, [session, dispatch]);
+    }, [session, dispatch, router]);
 
 
     return (
