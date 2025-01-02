@@ -5,6 +5,7 @@ import { CustomError } from "../utils/error/customError";
 import { StandardResponse } from "../utils/standardResponse";
 import pinModel from "../models/pinModel";
 import { CustomRequest } from "../types/interfaces";
+import userModel from "../models/userModel";
 
 //create board
 const createBoard = async (req: CustomRequest, res: Response) => {
@@ -14,6 +15,16 @@ const createBoard = async (req: CustomRequest, res: Response) => {
     description,
     createdBy: req.user?.id,
   });
+
+  const user = await userModel.findByIdAndUpdate(
+    req.user?.id,
+    { $push: { boards: board._id } },
+    { new: true }
+  );
+
+  if (!user) {
+    throw new CustomError("User not found", 404);
+  }
 
   res
     .status(201)
