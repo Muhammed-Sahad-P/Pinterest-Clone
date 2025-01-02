@@ -5,6 +5,14 @@ export interface Pin {
   imageUrl: string;
   createdAt: string;
   createdBy?: string;
+  description?: string;
+}
+
+export interface Comment {
+  _id: string;
+  text: string;
+  createdBy: string;
+  createdAt: string;
 }
 
 export interface ButtonProps {

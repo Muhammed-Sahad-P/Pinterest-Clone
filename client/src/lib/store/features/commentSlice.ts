@@ -1,12 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createComment, deleteComment } from "@/lib/store/thunks/comment-thunk";
-
-interface Comment {
-  _id: string;
-  text: string;
-  createdBy: string;
-  createdAt: string;
-}
+import {
+  createComment,
+  fetchComments,
+  deleteComment,
+} from "@/lib/store/thunks/comment-thunk";
+import { Comment } from "@/lib/types";
 
 interface CommentState {
   comments: Comment[];
@@ -34,6 +32,17 @@ const commentSlice = createSlice({
         state.comments.push(action.payload);
       })
       .addCase(createComment.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchComments.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchComments.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.comments = action.payload;
+      })
+      .addCase(fetchComments.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

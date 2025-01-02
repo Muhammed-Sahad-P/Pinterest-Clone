@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
 import Logo from "../ui/NavbarItems/Logo";
 import DesktopMenu from "../ui/NavbarItems/DesktopMenu";
-import SearchBar from "../ui/NavbarItems/SearchBar";
+import SearchBar from "../ui/SearchBar/SearchBar";
 import DesktopMenu1 from "../ui/NavbarItems/DesktopMenu1";
 import AuthButtons from "../ui/NavbarItems/AuthButton";
 import MobileMenu from "../ui/NavbarItems/MobileMenu";

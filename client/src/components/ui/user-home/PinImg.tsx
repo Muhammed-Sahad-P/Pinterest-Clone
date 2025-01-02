@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/lib/store";
 import { saveUnsavePin } from "@/lib/store/thunks/save-thunk";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface PinImageWithButtonsProps {
     pin: Pin;
@@ -52,14 +53,15 @@ const PinImag: React.FC<PinImageWithButtonsProps> = ({ pin }) => {
     return (
         <div className="relative group cursor-pointer">
             <div className="relative w-full">
-                <Image
-                    className="object-cover rounded-2xl w-full mt-2"
-                    src={pin.imageUrl}
-                    alt={`Pin ${pin._id}`}
-                    width={500}
-                    height={300}
-                />
-
+                <Link href={`/pin/${pin._id}`}>
+                    <Image
+                        className="object-cover rounded-2xl w-full mt-2"
+                        src={pin.imageUrl}
+                        alt={`Pin ${pin._id}`}
+                        width={500}
+                        height={300}
+                    />
+                </Link>
                 <div className="absolute top-4 left-2 group-hover:block hidden">
                     <ActionButton
                         className="bg-transparent text-white px-3 py-2 rounded-full text-sm sm:text-base flex items-center hover:bg-[#665b5b] hover:bg-opacity-40 hover:backdrop-blur-none"

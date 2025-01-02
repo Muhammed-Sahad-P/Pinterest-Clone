@@ -6,7 +6,7 @@ interface SearchPayload {
   query: string;
 }
 
-//search
+// search thunk
 export const search = createAsyncThunk(
   "search/search",
   async ({ query }: SearchPayload, { rejectWithValue }) => {
@@ -15,11 +15,15 @@ export const search = createAsyncThunk(
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        return rejectWithValue({
-          message: error.response?.data.message || "Failed to search",
-        });
+        const errorMessage =
+          error.response?.data?.message || "Failed to search";
+        const errorCode = error.response?.status || "Unknown status";
+        return rejectWithValue({ message: errorMessage, code: errorCode });
       }
-      return rejectWithValue({ message: "An unknown error occurred" });
+      return rejectWithValue({
+        message: "An unknown error occurred",
+        code: "Unknown",
+      });
     }
   }
 );

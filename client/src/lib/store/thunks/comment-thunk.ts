@@ -26,6 +26,24 @@ export const createComment = createAsyncThunk(
   }
 );
 
+//get all comments for a pin
+export const fetchComments = createAsyncThunk(
+  "comment/fetchComments",
+  async (pinId: string, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/comments/${pinId}`);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue({
+          message: error.response?.data.message || "Failed to fetch comments",
+        });
+      }
+      return rejectWithValue({ message: "An unknown error occurred" });
+    }
+  }
+);
+
 //delete a comment
 export const deleteComment = createAsyncThunk(
   "comment/deleteComment",

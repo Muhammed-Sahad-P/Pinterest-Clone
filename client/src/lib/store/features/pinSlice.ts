@@ -16,6 +16,7 @@ export interface PinState {
   error: string | null;
   description: string;
   imageUrl: string;
+  selectedPin: Pin | null;
 }
 
 const initialState: PinState = {
@@ -27,6 +28,7 @@ const initialState: PinState = {
   title: "",
   description: "",
   imageUrl: "",
+  selectedPin: null,
 };
 
 const pinSlice = createSlice({
@@ -79,8 +81,7 @@ const pinSlice = createSlice({
       })
       .addCase(fetchPinById.fulfilled, (state, action) => {
         state.loading = false;
-        const pin = state.pins.find((p) => p === action.payload._id);
-        if (!pin) state.pins.push(action.payload);
+        state.selectedPin = action.payload;
       })
       .addCase(fetchPinById.rejected, (state, action) => {
         state.loading = false;

@@ -45,10 +45,10 @@ export const fetchPins = createAsyncThunk(
 //get pin by id
 export const fetchPinById = createAsyncThunk(
   "pin/fetchPinById",
-  async (id: string, { rejectWithValue }) => {
+  async (pinId: string, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/pins/${id}`);
-      return response.data;
+      const response = await axiosInstance.get(`/pins/${pinId}`);
+      return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue({
@@ -73,7 +73,7 @@ export const updatePin = createAsyncThunk(
           "Content-Type": "application/json",
         },
       });
-      return response.data;
+      return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue({
@@ -91,7 +91,7 @@ export const deletePinById = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.delete(`/pins/${id}`);
-      return response.data;
+      return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue({
