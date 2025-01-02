@@ -6,12 +6,7 @@ import {
   updateBoard,
   deleteBoard,
 } from "../thunks/board-thunk";
-
-export interface Board {
-  _id: string;
-  name: string;
-  data: string[];
-}
+import { Board } from "@/lib/types";
 
 interface BoardState {
   boards: Board[];

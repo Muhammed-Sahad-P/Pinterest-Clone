@@ -74,9 +74,6 @@ export default function UserPinProfile() {
         ? pins.filter(pin => pin?.pinId.createdBy === user?.id)
         : pins;
 
-    console.log(filteredPins, "filteredPins");
-
-
     return (
         <div className="px-4 sm:px-8 lg:px-16">
             <div className="mt-10 flex flex-wrap items-center gap-4 text-[16px] sm:text-[18px] mx-auto max-w-screen-xl font-semibold">

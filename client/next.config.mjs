@@ -22,6 +22,16 @@ const nextConfig = {
         hostname: "cdn-icons-png.flaticon.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "www.drupal.org",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "your-cdn-or-api.com",
+        port: "",
+      },
     ],
   },
 };

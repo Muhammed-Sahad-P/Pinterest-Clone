@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Board } from "@/lib/types";
+import { useFetchBoards } from "@/hooks/useFetchBoards";
 import {
     Select,
     SelectContent,
@@ -14,22 +14,19 @@ import {
 import CreateBoardModal from "./CreateBoardModal";
 
 interface BoardSelectProps {
-    boards: Board[];
     selectedBoard: string;
     onChange: (value: string) => void;
-    loading: boolean;
     onCreateBoard: (name: string, description: string) => Promise<void>;
     boardLoading: boolean;
 }
 
 const BoardSelect: React.FC<BoardSelectProps> = ({
-    boards,
     selectedBoard,
     onChange,
-    loading,
     onCreateBoard,
     boardLoading,
 }) => {
+    const { boards, loading } = useFetchBoards();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newBoardName, setNewBoardName] = useState("");
     const [newBoardDescription, setNewBoardDescription] = useState("");
@@ -59,9 +56,7 @@ const BoardSelect: React.FC<BoardSelectProps> = ({
                         </SelectTrigger>
                         <SelectContent className="max-h-48 overflow-y-auto rounded-lg shadow-md border border-gray-200 sm:max-h-48">
                             <SelectGroup>
-                                <SelectLabel className="text-black md:text-sm lg:text-base">
-                                    Boards
-                                </SelectLabel>
+                                <SelectLabel className="text-black md:text-sm lg:text-base">Boards</SelectLabel>
                                 {boards?.map((board, index) => (
                                     <SelectItem
                                         key={index}

@@ -19,4 +19,7 @@ export interface Board {
   _id: string;
   name: string;
   data?: string[];
+  description?: string;
+  createdBy?: string;
+  pins?: Pin[];
 }
