@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { MdKeyboardArrowDown, MdOutlineFileUpload } from "react-icons/md";
+import { FaLink } from "react-icons/fa";
 import { SlOptions } from "react-icons/sl";
 import ActionButton from "@/components/ui/user-home/ActionButton";
 import { Pin } from "@/lib/types";
@@ -68,22 +69,22 @@ const PinImag: React.FC<PinImageWithButtonsProps> = ({ pin }) => {
                     </ActionButton>
                 </div>
 
-                {/* Save Button */}
                 <div className="absolute top-4 right-3 group-hover:block hidden">
                     <ActionButton
                         className="bg-[#E60023] hover:bg-[#E60023]/80 text-white px-4 py-3 rounded-full text-sm sm:text-base"
                         onClick={handleSavePin}
+                        title="Save Pin"
                     >
                         Save
                     </ActionButton>
                 </div>
 
-                {/* Options Menu */}
                 <div className="absolute bottom-2 right-2 group-hover:block hidden">
                     <ActionButton
                         className="p-2 sm:p-2 bg-white rounded-full text-center text-sm sm:text-lg"
                         icon={SlOptions}
                         onClick={() => setIsPopupOpen((prev) => !prev)}
+                        title="Download Image"
                     />
                     {isPopupOpen && (
                         <div
@@ -109,6 +110,7 @@ const PinImag: React.FC<PinImageWithButtonsProps> = ({ pin }) => {
                             className="p-2 sm:p-2 bg-white rounded-full text-center text-sm sm:text-lg"
                             icon={MdOutlineFileUpload}
                             onClick={() => setIsSharePopupOpen((prev) => !prev)}
+                            title="Share"
                         />
                         {isSharePopupOpen && (
                             <div
@@ -121,13 +123,7 @@ const PinImag: React.FC<PinImageWithButtonsProps> = ({ pin }) => {
                                         className="flex flex-col items-center cursor-pointer"
                                         onClick={handleCopyLink}
                                     >
-                                        <Image
-                                            src="https://cdn-icons-png.flaticon.com/512/106/106837.png"
-                                            alt="Copy Link Icon"
-                                            className="w-10 h-10 rounded-full"
-                                            width={20}
-                                            height={20}
-                                        />
+                                        <FaLink className="w-10 h-10 rounded-full" />
                                         <span className="text-sm text-black mt-1">Copy Link</span>
                                     </div>
                                     <div className="flex flex-col items-center cursor-pointer">

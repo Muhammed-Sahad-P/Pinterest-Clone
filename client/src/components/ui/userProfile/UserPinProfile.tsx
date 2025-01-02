@@ -9,13 +9,16 @@ import { fetchSavedPins, saveUnsavePin } from "@/lib/store/thunks/save-thunk";
 import { useAppSelector } from "@/lib/store/hooks";
 import Image from "next/image";
 import ActionButton from "@/components/ui/user-home/ActionButton";
-import { MdEdit, MdOutlineFileUpload } from "react-icons/md";
+import { MdOutlineFileUpload } from "react-icons/md";
+import { SlOptions } from "react-icons/sl";
 import { Pin } from "@/lib/types";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
 
 export default function UserPinProfile() {
     const dispatch = useDispatch<AppDispatch>();
     const pins = useAppSelector((state: RootState) => state.save.savedPins);
+
     const [activeButton, setActiveButton] = useState<"favorites" | "createdByYou" | null>(null);
 
     const handleButtonClick = (button: "favorites" | "createdByYou") => {
@@ -39,6 +42,40 @@ export default function UserPinProfile() {
             toast.error((error as { message: string }).message || "Pin already saved" || "Pin removed from saved");
         }
     };
+
+    const handleDownloadImage = async (imageUrl: string, pinId: string) => {
+        try {
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `pin-${pinId}.jpg`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch {
+            toast.error("Failed to download the image");
+        }
+    };
+
+    const handleCopyLink = (imageUrl: string) => {
+        navigator.clipboard.writeText(imageUrl);
+        toast.success("Link copied to clipboard");
+    };
+
+    const userId = Cookies.get("user");
+
+    const user = JSON.parse(userId || "");
+
+    const filteredPins = activeButton === "createdByYou"
+        ? pins.filter(pin => pin?.pinId.createdBy === user?.id)
+        : pins;
+
+    console.log(filteredPins, "filteredPins");
+
 
     return (
         <div className="px-4 sm:px-8 lg:px-16">
@@ -69,8 +106,8 @@ export default function UserPinProfile() {
             </div>
 
             <div className="mt-6 flex flex-wrap gap-4">
-                {pins?.length > 0 ? (
-                    pins?.map((pin: Pin, i) => {
+                {filteredPins?.length > 0 ? (
+                    filteredPins?.map((pin: Pin, i) => {
                         if (!pin?.pinId || !pin.pinId._id) {
                             return null;
                         }
@@ -92,7 +129,7 @@ export default function UserPinProfile() {
 
                                     <div className="absolute top-4 right-3 hidden group-hover:block">
                                         <ActionButton
-                                            onClick={() => handleSavePin(pin.pinId._id)} // Safe access of pinId
+                                            onClick={() => handleSavePin(pin.pinId._id)}
                                             className="bg-[#E60023] hover:bg-[#E60023]/80 text-white px-4 py-2 rounded-full text-sm sm:text-sm"
                                         >
                                             {pins.some((savedPin) => savedPin.pinId._id === pin.pinId._id)
@@ -104,11 +141,15 @@ export default function UserPinProfile() {
                                     <div className="absolute bottom-4 right-4 gap-2 group-hover:flex hidden">
                                         <ActionButton
                                             className="p-2 bg-white rounded-full text-center text-sm sm:text-lg shadow-md hover:shadow-lg"
-                                            icon={MdEdit}
+                                            icon={SlOptions}
+                                            onClick={() => handleCopyLink(pin.pinId.imageUrl)}
+                                            title="Copy Link"
                                         />
                                         <ActionButton
                                             className="p-2 bg-white rounded-full text-center text-sm sm:text-lg shadow-md hover:shadow-lg"
                                             icon={MdOutlineFileUpload}
+                                            onClick={() => handleDownloadImage(pin.pinId.imageUrl, pin.pinId._id)}
+                                            title="Download"
                                         />
                                     </div>
                                 </div>

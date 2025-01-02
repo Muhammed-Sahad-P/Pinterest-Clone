@@ -6,11 +6,7 @@ import {
   fetchPins,
   updatePin,
 } from "../thunks/pin-thunk";
-
-export interface Pin {
-  _id: string;
-  imageUrl: string;
-}
+import { Pin } from "@/lib/types";
 export interface PinState {
   _id: string;
   pins: Pin[];

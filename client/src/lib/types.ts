@@ -1,9 +1,10 @@
 export interface Pin {
-  pinId: { _id: string; imageUrl: string };
+  pinId: { _id: string; imageUrl: string; createdBy?: string };
   _id: string;
   title?: string;
   imageUrl: string;
   createdAt: string;
+  createdBy?: string;
 }
 
 export interface ButtonProps {
@@ -11,6 +12,7 @@ export interface ButtonProps {
   children?: React.ReactNode;
   icon?: React.ElementType;
   onClick?: () => void;
+  title?: string;
 }
 
 export interface Board {
