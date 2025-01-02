@@ -42,6 +42,9 @@ interface UserState {
   error: string | null;
   forgetEmail: string | null;
   setForgetEmail: string | null;
+  showModal: boolean;
+  isLoginModalOpen: boolean;
+  isSignupModalOpen: boolean;
 }
 
 const initialState: UserState = {
@@ -58,6 +61,9 @@ const initialState: UserState = {
   loggedUser: null,
   forgetEmail: null,
   setForgetEmail: null,
+  showModal: false,
+  isLoginModalOpen: false,
+  isSignupModalOpen: false,
 };
 
 const userSlice = createSlice({
@@ -82,6 +88,15 @@ const userSlice = createSlice({
     },
     setForgetEmail: (state, action) => {
       state.forgetEmail = action.payload;
+    },
+    setShowModal: (state, action) => {
+      state.showModal = action.payload;
+    },
+    setIsLoginModalOpen: (state, action) => {
+      state.isLoginModalOpen = action.payload;
+    },
+    setIsSignupModalOpen: (state, action) => {
+      state.isSignupModalOpen = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -199,7 +214,14 @@ const userSlice = createSlice({
   },
 });
 
-export const { logout, setLoading, clearMessages, setForgetEmail } =
-  userSlice.actions;
+export const {
+  logout,
+  setLoading,
+  clearMessages,
+  setForgetEmail,
+  setShowModal,
+  setIsLoginModalOpen,
+  setIsSignupModalOpen,
+} = userSlice.actions;
 
 export default userSlice.reducer;

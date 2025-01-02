@@ -15,12 +15,16 @@ import MobileMenu1 from "../ui/NavbarItems/MobileMenu1";
 import DesktopPublicMenu from "../ui/NavbarItems/DesktopPublicMenu";
 import MobilePublicMenu from "../ui/NavbarItems/MobilePublicMenu";
 import { FcMenu } from "react-icons/fc";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { setIsLoginModalOpen, setIsSignupModalOpen } from "@/lib/store/features/userSlice";
 
 const Navbar: React.FC = () => {
-    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-    const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+    const { isLoginModalOpen, isSignupModalOpen } = useAppSelector((state) => state.user);
+
+    const dispatch = useAppDispatch();
+
 
     const pathname = usePathname();
     const router = useRouter();
@@ -72,8 +76,8 @@ const Navbar: React.FC = () => {
                             </div>
                             <div className="hidden md:flex space-x-8">
                                 <AuthButtons
-                                    onLoginClick={() => setIsLoginModalOpen(true)}
-                                    onSignupClick={() => setIsSignupModalOpen(true)}
+                                    onLoginClick={() => dispatch(setIsLoginModalOpen(true))}
+                                    onSignupClick={() => dispatch(setIsSignupModalOpen(true))}
                                 />
                             </div>
                         </>
@@ -92,8 +96,8 @@ const Navbar: React.FC = () => {
                 isLoggedIn ? (
                     <MobileMenu
                         onSearchClick={() => { }}
-                        onLoginClick={() => setIsLoginModalOpen(true)}
-                        onSignupClick={() => setIsSignupModalOpen(true)}
+                        onLoginClick={() => dispatch(setIsLoginModalOpen(true))}
+                        onSignupClick={() => dispatch(setIsSignupModalOpen(true))}
                     >
                     </MobileMenu>
                 ) : (
@@ -101,16 +105,16 @@ const Navbar: React.FC = () => {
                         <MobilePublicMenu />
                         <MobileMenu1
                             onSearchClick={() => { }}
-                            onLoginClick={() => setIsLoginModalOpen(true)}
-                            onSignupClick={() => setIsSignupModalOpen(true)}
+                            onLoginClick={() => dispatch(setIsLoginModalOpen(true))}
+                            onSignupClick={() => dispatch(setIsSignupModalOpen(true))}
                         >
                         </MobileMenu1>
                     </>
                 )
 
             )}
-            {isLoginModalOpen && <LoginModal onClose={() => setIsLoginModalOpen(false)} />}
-            {isSignupModalOpen && <SignupModal onClose={() => setIsSignupModalOpen(false)} />}
+            {isLoginModalOpen && <LoginModal onClose={() => dispatch(setIsLoginModalOpen(false))} />}
+            {isSignupModalOpen && <SignupModal onClose={() => dispatch(setIsSignupModalOpen(false))} />}
         </nav>
     );
 };

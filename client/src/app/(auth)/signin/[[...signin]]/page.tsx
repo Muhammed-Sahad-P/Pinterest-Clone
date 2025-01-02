@@ -1,23 +1,22 @@
 "use client";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { clearMessages, setForgetEmail } from "@/lib/store/features/userSlice";
-import { googleLogin, loginUser } from "@/lib/store/thunks/user-thunks";
+import { clearMessages, setForgetEmail, setIsLoginModalOpen, setShowModal } from "@/lib/store/features/userSlice";
+import { loginUser } from "@/lib/store/thunks/user-thunks";
 import { AppDispatch, RootState } from "@/lib/store";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { signIn, useSession } from "next-auth/react";
-import { toast } from "sonner";
+import { signIn } from "next-auth/react";
 
 export default function Signin() {
+
+
     const [showPassword, setShowPassword] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
-
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
 
@@ -39,28 +38,13 @@ export default function Signin() {
         router.push("/forgot-password");
     };
 
-    const { data: session } = useSession()
 
-    const handleGoogleLogin = () => {
-        signIn("google");
+
+
+
+    const handleGoogleLogin = async () => {
+        await signIn("google");
     }
-
-
-    useEffect(() => {
-        if (session) {
-            const fetchData = async () => {
-
-                const email = session?.user?.email;
-                if (email) {
-                    await dispatch(googleLogin({ email })).unwrap();
-                    router.push('/u/home');
-                } else {
-                    toast("Google login session is missing required fields.");
-                }
-            }
-            fetchData()
-        }
-    }, [session, dispatch, router]);
 
 
     return (
@@ -68,7 +52,7 @@ export default function Signin() {
             <div className="bg-white rounded-3xl w-[90%] max-w-lg shadow-lg relative flex flex-col items-center h-auto">
                 <button
                     className="absolute top-6 right-8 text-black text-2xl font-bold rounded-full w-5 h-5 flex items-center justify-center"
-                    onClick={() => window.location.reload()}
+                    onClick={() => dispatch(setIsLoginModalOpen(false))}
                 >
                     ✕
                 </button>
@@ -198,13 +182,12 @@ export default function Signin() {
                 <div className="bg-white py-2 w-full rounded-b-3xl mt-2 flex-shrink-0">
                     <div className="text-black font-semibold text-[12px] text-center">
                         Not on Pinterest yet?
-                        <Link href="/signup" className="text-black font-semibold ml-2">
+                        <div className="text-black font-semibold ml-2 cursor-pointer hover:underline" onClick={() => dispatch(setShowModal(false))}>
                             Sign up
-                        </Link>
+                        </div>
                     </div>
                     <div
                         className="text-black text-[12px] text-center mb-2 mt-2"
-                        onClick={() => alert("Switch to Business Account!")}
                     >
                         Are you a business?<a href="#" className="text-black"> Get started here!</a>
                     </div>

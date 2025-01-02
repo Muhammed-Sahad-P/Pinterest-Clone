@@ -35,9 +35,9 @@ export function NavDropdown() {
 
     const firstLetter = email ? email.charAt(0).toUpperCase() : <FaUserCircle />;
 
-    const handleLogout = () => {
-        signOut();
-        dispatch(logout());
+    const handleLogout = async () => {
+        await signOut();
+        await dispatch(logout());
         router.push("/");
         window.location.reload();
     };

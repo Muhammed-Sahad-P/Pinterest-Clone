@@ -6,9 +6,8 @@ import * as Yup from "yup";
 import { FcGoogle } from "react-icons/fc";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { clearMessages } from "@/lib/store/features/userSlice";
+import { clearMessages, setIsSignupModalOpen, setShowModal } from "@/lib/store/features/userSlice";
 import { googleLogin, signup } from "@/lib/store/thunks/user-thunks";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import { toast } from "sonner";
@@ -20,6 +19,9 @@ interface FormValues {
 }
 
 export default function Signup() {
+
+    const { data: session } = useSession()
+
     const [showPassword, setShowPassword] = React.useState(false);
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -57,7 +59,7 @@ export default function Signup() {
         );
 
         if (signup.fulfilled.match(resultAction)) {
-            router.push('/signin');
+            dispatch(setShowModal(true))
         }
         setSubmitting(false);
     };
@@ -76,37 +78,36 @@ export default function Signup() {
         onSubmit: handleSubmit,
     });
 
-    const { data: session } = useSession()
-
-
-    const handleGoogleLogin = () => {
-        signIn("google");
-    }
-
 
     useEffect(() => {
-        if (session) {
-            const fetchData = async () => {
-
-                const email = session?.user?.email;
-                if (email) {
-                    await dispatch(googleLogin({ email })).unwrap();
-                    router.push('/u/home');
-                } else {
-                    toast("Google login session is missing required fields.");
-                }
+        if (session?.user) {
+            const { email } = session.user;
+            if (email) {
+                dispatch(googleLogin({ email })).unwrap().then((response) => {
+                    if (response.statusCode === 200) {
+                        router.push('/u/home');
+                    }
+                    if (response.message) {
+                        toast(response.message);
+                    }
+                })
+                    .catch((error) => {
+                        toast.error((error as { message: string }).message || "An unknown error occurred");
+                    });
             }
-            fetchData()
         }
     }, [session, dispatch, router]);
 
+    const handleGoogleLogin = async () => {
+        await signIn("google");
+    }
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="bg-white rounded-3xl w-[90%] max-w-lg shadow-lg relative flex flex-col items-center h-auto">
                 <button
                     className="absolute top-6 right-8 text-black text-2xl font-bold rounded-full w-5 h-5 flex items-center justify-center"
-                    onClick={() => window.location.reload()}
+                    onClick={() => dispatch(setIsSignupModalOpen(false))}
                 >
                     ✕
                 </button>
@@ -240,15 +241,15 @@ export default function Signup() {
                             </a>
                         </span>
                     </p>
-                    <p className="text-[12px] text-black mt-2">
+                    <div className="text-[12px] text-black mt-2">
                         Already a member?{" "}
-                        <Link
-                            href="/signin"
-                            className="text-black font-semibold"
+                        <p
+                            className="text-black font-semibold cursor-pointer  hover:underline"
+                            onClick={() => dispatch(setShowModal(true))}
                         >
                             Log in
-                        </Link>
-                    </p>
+                        </p>
+                    </div>
                 </div>
 
                 <div className="bg-[#E9E9E9] py-2 w-full rounded-b-3xl mt-2 flex-shrink-0">
