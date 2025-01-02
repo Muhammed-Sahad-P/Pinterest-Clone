@@ -6,9 +6,12 @@ export interface Pin {
   createdAt: string;
   createdBy?: string;
   description?: string;
+  likeCount?: number;
+  saveCount?: number;
 }
 
 export interface Comment {
+  commentId: string;
   _id: string;
   text: string;
   createdBy: string;

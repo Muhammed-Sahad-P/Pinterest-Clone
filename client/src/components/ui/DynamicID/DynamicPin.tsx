@@ -1,5 +1,5 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/store";
@@ -9,10 +9,13 @@ import { SlOptions } from "react-icons/sl";
 import { MdOutlineFileUpload } from "react-icons/md";
 import ActionButton from "../user-home/ActionButton";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { IoArrowBackCircleOutline } from "react-icons/io5";
+import { useSavePin } from "@/hooks/useSavePin";
 
 export default function DynamicPin() {
     const { pinId } = useParams<{ pinId: string }>();
     const dispatch = useDispatch<AppDispatch>();
+    const router = useRouter();
     const { selectedPin, loading, error } = useSelector((state: RootState) => state.pin);
     const [comment, setComment] = useState("");
 
@@ -26,8 +29,7 @@ export default function DynamicPin() {
         setComment(e.target.value);
     };
 
-    const handleSave = () => {
-    };
+    const handleSave = useSavePin();
 
     const handleLike = () => {
     };
@@ -46,6 +48,9 @@ export default function DynamicPin() {
 
     return (
         <div className="flex items-center justify-center bg-white p-6">
+            <div className="left-4 flex mr-5 top-0">
+                <IoArrowBackCircleOutline className="text-3xl text-black cursor-pointer" onClick={() => router.back()} />
+            </div>
             <div className="bg-white border w-full md:w-[700px] rounded-2xl shadow-lg flex">
                 <div className="w-1/2 p-4">
                     {selectedPin.imageUrl && (
@@ -75,8 +80,8 @@ export default function DynamicPin() {
                         </div>
                         <ActionButton
                             className="bg-[#E60023] hover:bg-[#E60023]/80 text-white px-5 py-3 rounded-full text-sm sm:text-base"
-                            onClick={handleSave}
                             title="Save Pin"
+                            onClick={() => { handleSave(pinId) }}
                         >
                             Save
                         </ActionButton>
