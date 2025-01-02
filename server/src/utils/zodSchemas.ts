@@ -52,7 +52,7 @@ export const BoardSchema = z.object({
 });
 
 export const CommentSchema = z.object({
-  text: z.string().min(3, "Comment must be at least 3 characters long"),
+  text: z.string().min(1, "Comment must be at least 1 characters long"),
   pinId: z.string().min(24, "Invalid pin ID"),
   createdBy: z.string().min(24, "Invalid user ID"),
   createdAt: z.date().optional(),
