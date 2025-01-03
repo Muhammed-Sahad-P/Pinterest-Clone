@@ -4,6 +4,13 @@ import StoreProvider from "@/lib/store/store-provider";
 import { Toaster } from "@/components/ui/sonner"
 import SessionProvider from '@/providers/authProvider';
 import { getServerSession } from 'next-auth';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Pinterest Clone",
+  description: "A Pinterest clone with nextjs and tailwindcss",
+};
+
 export default async function RootLayout({
   children,
 }: Readonly<{
