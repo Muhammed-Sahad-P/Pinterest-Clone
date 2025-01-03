@@ -41,6 +41,7 @@ const likeUnlikePin = async (req: CustomRequest, res: Response) => {
     res.status(200).json(
       new StandardResponse("Pin liked Successfully", {
         likeCount: pin.likeCount,
+        likedBy: like.likedBy,
         likedId: like._id,
       })
     );

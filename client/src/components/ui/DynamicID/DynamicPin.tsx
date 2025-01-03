@@ -1,7 +1,7 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/store";
 import { fetchPinById } from "@/lib/store/thunks/pin-thunk";
 import Image from "next/image";
@@ -11,14 +11,19 @@ import ActionButton from "../user-home/ActionButton";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { useSavePin } from "@/hooks/useSavePin";
+import { useAppSelector } from "@/lib/store/hooks";
+import { likeUnlikePin } from "@/lib/store/thunks/like-thunk";
 
 export default function DynamicPin() {
     const { pinId } = useParams<{ pinId: string }>();
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
-    const { selectedPin, loading, error } = useSelector((state: RootState) => state.pin);
+    const { selectedPin, loading, error } = useAppSelector((state: RootState) => state.pin);
+
     const [comment, setComment] = useState("");
 
+    const [likeCount, setLikeCount] = useState<number>(0);
+    console.log(likeCount, "likecount");
     useEffect(() => {
         if (pinId) {
             dispatch(fetchPinById(pinId));
@@ -31,7 +36,19 @@ export default function DynamicPin() {
 
     const handleSave = useSavePin();
 
-    const handleLike = () => {
+    useEffect(() => {
+        if (selectedPin?.likeCount !== undefined) {
+            setLikeCount(selectedPin.likeCount);
+        }
+    }, [selectedPin]);
+
+    const handleLike = async () => {
+        try {
+            const result = await dispatch(likeUnlikePin({ pinId })).unwrap();
+            setLikeCount(result.likeCount);
+        } catch (error) {
+            console.error("Failed to like/unlike the pin:", error);
+        }
     };
 
     if (loading) {
@@ -43,7 +60,7 @@ export default function DynamicPin() {
     }
 
     if (!selectedPin) {
-        return <div>No pin found with ID {pinId}</div>;
+        return <div>No pin found with ID</div>;
     }
 
     return (
@@ -65,8 +82,14 @@ export default function DynamicPin() {
                 </div>
                 <div className="w-1/2 p-4 flex flex-col justify-between">
                     <div className="flex justify-between items-start">
-                        <div className="flex space-x-6">
-                            <FavoriteBorderIcon className="text-black mt-3 cursor-pointer" fontSize="medium" titleAccess="Like" onClick={handleLike} />
+                        <div className="flex space-x-4">
+                            <FavoriteBorderIcon
+                                className="text-black mt-3 cursor-pointer"
+                                fontSize="medium"
+                                titleAccess="Like"
+                                onClick={handleLike}
+                            />
+                            <span className="text-black mt-3 cursor-pointer">{likeCount}</span>
                             <ActionButton
                                 className="mt-3 text-[25px]"
                                 icon={MdOutlineFileUpload}
@@ -87,14 +110,7 @@ export default function DynamicPin() {
                         </ActionButton>
                     </div>
                     <div className="mt-4 space-y-2">
-                        <div className="flex items-center">
-                            <div className="text-sm font-semibold">User1:</div>
-                            <p className="ml-2 text-sm">Great Pin!</p>
-                        </div>
-                        <div className="flex items-center">
-                            <div className="text-sm font-semibold">User2:</div>
-                            <p className="ml-2 text-sm">Love this! So creative.</p>
-                        </div>
+
                     </div>
                     <div className="mt-6 space-y-4">
                         <div className="flex items-center space-x-4">
@@ -103,11 +119,11 @@ export default function DynamicPin() {
                                 placeholder="Add a comment..."
                                 value={comment}
                                 onChange={handleCommentChange}
-                                className="border p-2 rounded-md w-full"
+                                className="border p-2 rounded-full w-full"
                             />
                             <button
                                 onClick={() => { }}
-                                className="bg-blue-500 text-white py-2 px-4 rounded-md"
+                                className="bg-[#E60023] text-white py-2 px-4 rounded-md"
                             >
                                 Post
                             </button>

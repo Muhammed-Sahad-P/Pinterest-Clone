@@ -17,6 +17,7 @@ export interface PinState {
   description: string;
   imageUrl: string;
   selectedPin: Pin | null;
+  like: number;
 }
 
 const initialState: PinState = {
@@ -29,12 +30,17 @@ const initialState: PinState = {
   description: "",
   imageUrl: "",
   selectedPin: null,
+  like: 0,
 };
 
 const pinSlice = createSlice({
   name: "pins",
   initialState,
-  reducers: {},
+  reducers: {
+    setLike: (state, action) => {
+      state.like = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createPin.pending, (state) => {
@@ -101,4 +107,6 @@ const pinSlice = createSlice({
       });
   },
 });
+
+export const { setLike } = pinSlice.actions;
 export default pinSlice.reducer;

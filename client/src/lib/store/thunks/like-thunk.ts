@@ -12,7 +12,7 @@ export const likeUnlikePin = createAsyncThunk(
   async ({ pinId }: LikePayload, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(`/pins/like/${pinId}`);
-      return response.data;
+      return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue({
