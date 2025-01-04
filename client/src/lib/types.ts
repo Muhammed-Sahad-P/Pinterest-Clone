@@ -4,18 +4,27 @@ export interface Pin {
   title?: string;
   imageUrl: string;
   createdAt: string;
-  createdBy?: string;
+  createdBy?: {
+    _id: string;
+    username: string;
+    email: string;
+  };
   description?: string;
   likeCount?: number;
   saveCount?: number;
 }
 
 export interface Comment {
+  createdAt: string;
   commentId: string;
   _id: string;
   text: string;
-  createdBy: string;
-  createdAt: string;
+  pinId: string;
+  createdBy: {
+    _id: string;
+    username: string;
+    email: string;
+  };
 }
 
 export interface ButtonProps {

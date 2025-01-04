@@ -14,7 +14,8 @@ export const createComment = createAsyncThunk(
   async ({ pinId, text }: CommentPayload, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(`/comments/${pinId}`, { text });
-      return response.data;
+      console.log(response.data, "create comm thunk");
+      return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue({
@@ -32,7 +33,8 @@ export const fetchComments = createAsyncThunk(
   async (pinId: string, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(`/comments/${pinId}`);
-      return response.data;
+      console.log(response.data, "comments fetch pin thunk");
+      return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue({
