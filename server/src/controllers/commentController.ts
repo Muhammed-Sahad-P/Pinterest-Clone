@@ -30,6 +30,9 @@ const addComment = async (req: CustomRequest, res: Response) => {
     createdBy: validateData.createdBy,
   });
 
+  pin.comments.push(comment._id);
+  await pin.save();
+
   res
     .status(200)
     .json(new StandardResponse("Comment added successfully", comment));

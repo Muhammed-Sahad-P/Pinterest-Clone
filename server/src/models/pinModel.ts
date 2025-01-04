@@ -8,6 +8,7 @@ export interface IPin extends Document {
   saveCount: number;
   boardId: mongoose.Types.ObjectId;
   createdBy: mongoose.Types.ObjectId;
+  comments: mongoose.Types.ObjectId[];
 }
 
 const PinSchema: Schema = new mongoose.Schema(
@@ -19,6 +20,7 @@ const PinSchema: Schema = new mongoose.Schema(
       ref: "Board",
       required: true,
     },
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

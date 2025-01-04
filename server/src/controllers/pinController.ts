@@ -7,6 +7,7 @@ import { CustomError } from "../utils/error/customError";
 import { StandardResponse } from "../utils/standardResponse";
 import { CustomRequest } from "../types/interfaces";
 import cloudinary from "../utils/cloudinary";
+import { model } from "mongoose";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -82,7 +83,11 @@ const getPinById = async (req: Request, res: Response) => {
 
   const pin = await pinModel
     .findById(id)
-    .populate("createdBy", "username email");
+    .populate("createdBy", "username email")
+    .populate({
+      path: "comments",
+      populate: { path: "createdBy", model: "User" },
+    });
 
   if (!pin) {
     throw new CustomError("Pin not found", 404);

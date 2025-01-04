@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IComment extends Document {
+  _id: mongoose.Types.ObjectId;
   text: string;
   pinId: mongoose.Types.ObjectId;
   createdBy: mongoose.Types.ObjectId;
