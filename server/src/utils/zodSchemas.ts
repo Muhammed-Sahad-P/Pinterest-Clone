@@ -1,3 +1,4 @@
+import { title } from "process";
 import { z } from "zod";
 
 export const RegisterSchema = z.object({
@@ -38,6 +39,7 @@ export const EditUserSchema = z.object({
 });
 
 export const PinSchema = z.object({
+  title: z.string().min(3, "Pin title must be at least 3 characters long"),
   imageUrl: z.string().optional(),
   description: z.string().optional(),
   boardId: z.string().min(24, "Invalid board ID").optional(),

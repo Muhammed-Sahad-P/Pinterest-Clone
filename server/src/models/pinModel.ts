@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface IPin extends Document {
   _id: mongoose.Types.ObjectId;
+  title: string;
   imageUrl?: string;
   description?: string;
   likeCount: number;
@@ -13,6 +14,7 @@ export interface IPin extends Document {
 
 const PinSchema: Schema = new mongoose.Schema(
   {
+    title: { type: String, required: true },
     imageUrl: { type: String, required: true },
     description: { type: String, maxlength: 500 },
     boardId: {

@@ -14,7 +14,7 @@ const upload = multer({ storage });
 
 // Create Pin
 const createPin = async (req: CustomRequest, res: Response) => {
-  const { description, boardId } = PinSchema.parse(req.body);
+  const { title, description, boardId } = PinSchema.parse(req.body);
 
   if (!req.file) {
     throw new CustomError("No image file provided", 400);
@@ -55,6 +55,7 @@ const createPin = async (req: CustomRequest, res: Response) => {
   }
 
   const pin = await pinModel.create({
+    title,
     imageUrl,
     description,
     boardId,
