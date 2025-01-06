@@ -5,15 +5,16 @@ import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/store";
 import { fetchUserProfile } from "@/lib/store/thunks/user-thunks";
 import { useAppSelector } from '@/lib/store/hooks';
-import UserPinProfile from '../ui/userProfile/UserPinProfile';
-import UserBoardProfile from '../ui/userProfile/UserBoardProfile';
+import UserPinProfile from '../userProfile/UserPinProfile';
+import UserBoardProfile from '../userProfile/UserBoardProfile';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ProfilePage() {
     const dispatch = useDispatch<AppDispatch>();
 
     const user = useAppSelector((state: RootState) => state.user.userProfile);
     const { email, following } = user || {};
-
     const [activeTab, setActiveTab] = useState<'activity' | 'pins' | 'boards'>('pins');
 
     useEffect(() => {
@@ -37,21 +38,34 @@ export default function ProfilePage() {
                 </h2>
                 <div className="flex flex-wrap items-center gap-4">
                     <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-[#E9E9E9] flex justify-center items-center">
-                        <span className="text-black text-lg sm:text-xl">
-                            {firstLetter || <FaUserCircle />}
-                        </span>
+                        {user?.profilePicture ? (
+                            <Image
+                                src={user.profilePicture}
+                                alt="Profile Picture"
+                                className="w-full h-full object-cover rounded-full"
+                                width={100}
+                                height={100}
+                            />
+                        ) : (
+                            <span className="text-black text-lg sm:text-xl">
+                                {firstLetter || <FaUserCircle />}
+                            </span>
+                        )}
                     </div>
+
                     <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 text-center sm:text-left">
                         <div>
                             <p className="font-semibold text-lg sm:text-xl">{emailName}</p>
                             <p className="text-black text-sm sm:text-base">{following?.length || 0} following</p>
                         </div>
-                        <button
-                            className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#E9E9E9] text-black font-semibold rounded-3xl mt-2 sm:mt-0"
-                            onClick={() => console.log('View Profile button clicked')}
-                        >
-                            View Profile
-                        </button>
+                        <Link href="/u/settings">
+                            <button
+                                className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#E9E9E9] text-black font-semibold rounded-3xl mt-2 sm:mt-0"
+                                onClick={() => console.log('View Profile button clicked')}
+                            >
+                                Edit Profile
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

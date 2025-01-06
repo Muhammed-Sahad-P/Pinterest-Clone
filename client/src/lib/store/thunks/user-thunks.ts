@@ -125,18 +125,29 @@ export const updateUserProfile = createAsyncThunk(
       username,
       email,
       profilePicture,
-    }: { username: string; email: string; profilePicture?: string },
+    }: {
+      username: string;
+      email: string;
+      profilePicture?: File | string;
+    },
     { rejectWithValue }
   ) => {
     const userDetails = Cookies.get("user");
     const user = JSON.parse(userDetails || "");
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("email", email);
+    if (profilePicture instanceof File) {
+      formData.append("profilePicture", profilePicture);
+    }
     try {
       const response = await axiosInstance.put(
         `/profile/${user.id}`,
-        { username, email, profilePicture },
+        formData,
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -148,7 +159,6 @@ export const updateUserProfile = createAsyncThunk(
             error.response?.data.message || "Failed to update user profile",
         });
       }
-      return rejectWithValue({ message: "An unknown error occurred" });
     }
   }
 );

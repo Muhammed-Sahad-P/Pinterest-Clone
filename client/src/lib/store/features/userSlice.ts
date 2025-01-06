@@ -16,16 +16,15 @@ import { User } from "@/types/user";
 interface UserProfile {
   _id?: string;
   email: string;
-  userName?: string;
+  username?: string;
   followers?: string[];
   following?: string[];
-  firstName?: string;
-  lastName?: string;
   image?: string;
   bio?: string;
   name?: string;
   boards?: string[];
   phoneNumber?: string;
+  profilePicture?: string;
 }
 
 interface UserState {

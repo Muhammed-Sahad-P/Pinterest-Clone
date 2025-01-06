@@ -1,4 +1,4 @@
-import ProfilePage from '@/components/user-profile/user-profile'
+import ProfilePage from '@/components/ui/user-profile/user-profile'
 import React from 'react'
 
 export default function page() {

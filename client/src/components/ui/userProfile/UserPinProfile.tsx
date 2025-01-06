@@ -14,6 +14,7 @@ import { SlOptions } from "react-icons/sl";
 import { Pin } from "@/lib/types";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
+import Link from "next/link";
 
 export default function UserPinProfile() {
     const dispatch = useDispatch<AppDispatch>();
@@ -115,13 +116,16 @@ export default function UserPinProfile() {
                             >
                                 <div className="relative w-full h-full bg-white rounded-lg shadow-lg overflow-hidden">
                                     {pin?.pinId?.imageUrl && (
-                                        <Image
-                                            className="w-full h-full object-cover"
-                                            src={pin.pinId.imageUrl}
-                                            alt="Pin"
-                                            width={300}
-                                            height={300}
-                                        />
+                                        <Link href={`/pin/${pin.pinId._id}`}>
+
+                                            <Image
+                                                className="w-full h-full object-cover"
+                                                src={pin.pinId.imageUrl}
+                                                alt="Pin"
+                                                width={300}
+                                                height={300}
+                                            />
+                                        </Link>
                                     )}
 
                                     <div className="absolute top-4 right-3 hidden group-hover:block">
