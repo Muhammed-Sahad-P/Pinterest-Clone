@@ -16,11 +16,13 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
 
 export function NavDropdown() {
     const dispatch = useDispatch<AppDispatch>();
     const currentAccount = useSelector((state: RootState) => state.user.currentAccount);
     const router = useRouter();
+    const userProfile = useSelector((state: RootState) => state.user.userProfile);
 
     const userCookie = Cookies.get("user");
     let email = null;
@@ -34,6 +36,7 @@ export function NavDropdown() {
     }
 
     const firstLetter = email ? email.charAt(0).toUpperCase() : <FaUserCircle />;
+    const profilePicture = userProfile?.profilePicture;
 
     const handleLogout = async () => {
         await signOut();
@@ -52,7 +55,17 @@ export function NavDropdown() {
         <DropdownMenu>
             <Link href="/u/profile">
                 <div className={avatarClass}>
-                    {typeof firstLetter === "string" ? firstLetter : <FaUserCircle />}
+                    {profilePicture ? (
+                        <Image
+                            src={profilePicture}
+                            alt="Profile Picture"
+                            className="w-full h-full object-cover rounded-full"
+                            width={40}
+                            height={40}
+                        />
+                    ) : (
+                        typeof firstLetter === "string" ? firstLetter : <FaUserCircle />
+                    )}
                 </div>
             </Link>
             <DropdownMenuTrigger asChild>
@@ -69,12 +82,21 @@ export function NavDropdown() {
                     <DropdownMenuItem>
                         <div className="flex items-center gap-2">
                             <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
-                                {typeof firstLetter === "string" ? firstLetter : <FaUserCircle />}
+                                {profilePicture ? (
+                                    <Image
+                                        src={profilePicture}
+                                        alt="Profile Picture"
+                                        className="w-full h-full object-cover rounded-full"
+                                        width={40}
+                                        height={40}
+                                    />
+                                ) : (
+                                    typeof firstLetter === "string" ? firstLetter : <FaUserCircle />
+                                )}
                             </div>
                             <span className={`${itemClass} font-bold ml-1`}>{email || "Guest"}</span>
                         </div>
                     </DropdownMenuItem>
-
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
@@ -94,7 +116,9 @@ export function NavDropdown() {
                 <span className="block px-2 py-1 text-xs text-black">more options</span>
                 <DropdownMenuGroup>
                     <DropdownMenuItem>
-                        <span className={`${itemClass} font-bold`}>Settings</span>
+                        <Link href="/u/settings">
+                            <span className={`${itemClass} font-bold`}>Settings</span>
+                        </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                         <span className={`${itemClass} font-bold`}>Home feed tuner</span>

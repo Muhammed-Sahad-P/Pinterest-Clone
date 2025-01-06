@@ -62,8 +62,8 @@ export default function UserSettings() {
     }
 
     return (
-        <div className="flex">
-            <div className="w-1/4 bg-white p-4 mt-8 ml-3">
+        <div className="flex flex-col lg:flex-row">
+            <div className="w-full lg:w-1/4 bg-white p-4 mt-8 lg:mt-0 ml-3 lg:ml-0">
                 <ul className="space-y-4 text-black font-semibold">
                     <li className="font-medium">Edit profile</li>
                     <li>Account management</li>
@@ -77,8 +77,7 @@ export default function UserSettings() {
                     <li>Branded Content</li>
                 </ul>
             </div>
-
-            <div className="w-3/4 max-w-4xl mx-auto mr-48 mt-5 p-6 bg-white">
+            <div className="w-full lg:w-3/4 max-w-4xl mx-auto mr-48 mt-5 p-6 bg-white">
                 <h1 className="text-3xl font-semibold mb-6">Edit Profile</h1>
                 <p className="text-black mb-6">
                     Keep your personal details private. Information you add here is
@@ -124,7 +123,7 @@ export default function UserSettings() {
                             placeholder="Username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            className="mt-1 block w-1/3 p-3 border border-gray-300 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            className="mt-1 block w-full lg:w-1/3 p-3 border border-gray-300 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         />
                     </div>
 
@@ -134,7 +133,7 @@ export default function UserSettings() {
                             type="text"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="mt-1 block w-2/3 p-3 border border-gray-300 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            className="mt-1 block w-full lg:w-2/3 p-3 border border-gray-300 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                             placeholder="Add your email"
                         />
                     </div>
@@ -142,7 +141,7 @@ export default function UserSettings() {
                     <div>
                         <label className="block text-black text-[13px]">About</label>
                         <textarea
-                            className="mt-1 block w-2/3 p-7 border border-gray-300 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            className="mt-1 block w-full lg:w-2/3 p-7 border border-gray-300 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                             placeholder="Tell your story"
                         ></textarea>
                     </div>
