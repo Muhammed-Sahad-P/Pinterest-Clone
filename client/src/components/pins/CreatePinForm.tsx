@@ -12,7 +12,7 @@ import CreateBoardModal from "../ui/PinCreateItems/CreateBoardModal";
 
 const CreatePinForm: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const { boards, loading: boardLoading } = useSelector(
+    const { loading: boardLoading } = useSelector(
         (state: RootState) => state.board
     );
     const { loading: pinLoading } = useSelector((state: RootState) => state.pin);
@@ -139,10 +139,8 @@ const CreatePinForm: React.FC = () => {
                         required
                     />
                     <BoardSelect
-                        boards={boards}
                         selectedBoard={selectedBoard}
                         onChange={(value) => setSelectedBoard(value)}
-                        loading={boardLoading}
                         onCreateBoard={async (name, description) => {
                             const response = await dispatch(
                                 createBoard({ name, description })

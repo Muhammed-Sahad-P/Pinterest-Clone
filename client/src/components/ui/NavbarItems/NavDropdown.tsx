@@ -17,12 +17,20 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
+import { useEffect } from "react";
+import { fetchUserProfile } from "@/lib/store/thunks/user-thunks";
 
 export function NavDropdown() {
     const dispatch = useDispatch<AppDispatch>();
     const currentAccount = useSelector((state: RootState) => state.user.currentAccount);
     const router = useRouter();
     const userProfile = useSelector((state: RootState) => state.user.userProfile);
+
+    useEffect(() => {
+        if (!userProfile) {
+            dispatch(fetchUserProfile());
+        }
+    }, [dispatch, userProfile]);
 
     const userCookie = Cookies.get("user");
     let email = null;

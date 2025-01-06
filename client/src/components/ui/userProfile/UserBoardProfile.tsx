@@ -17,7 +17,7 @@ export default function UserBoardProfile() {
             const filteredBoards = boards.filter((board) => board.createdBy === user.id);
             setUserBoards(filteredBoards);
         }
-    }, [boards]);
+    }, [boards, user?.id]);
 
     return (
         <div className="px-4 sm:px-8 lg:px-16">
