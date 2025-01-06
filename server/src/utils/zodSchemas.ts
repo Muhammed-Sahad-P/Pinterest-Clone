@@ -26,8 +26,11 @@ export const LoginSchema = z.object({
 });
 
 export const EditUserSchema = z.object({
-  username: z.string().min(3, "Username must be at least 3 characters long"),
-  email: z.string().email("Invalid email"),
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters long")
+    .optional(),
+  email: z.string().email("Invalid email").optional(),
   profilePicture: z.string().optional(),
   boards: z.array(z.string()).optional(),
   createdAt: z.date().optional(),
