@@ -22,7 +22,6 @@ const SearchBar: React.FC = () => {
     const { results, isLoading, error } = useSelector(
         (state: RootState) => state.search
     );
-    console.log(results, "search results");
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newQuery = e.target.value;
@@ -81,10 +80,6 @@ const SearchBar: React.FC = () => {
             dispatch(search({ query }));
         }
     };
-
-    useEffect(() => {
-        console.log(results, "results");
-    }, [results])
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);

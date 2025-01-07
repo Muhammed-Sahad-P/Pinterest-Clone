@@ -61,7 +61,6 @@ export default function ProfilePage() {
                         <Link href="/u/settings">
                             <button
                                 className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#E9E9E9] text-black font-semibold rounded-3xl mt-2 sm:mt-0"
-                                onClick={() => console.log('View Profile button clicked')}
                             >
                                 Edit Profile
                             </button>

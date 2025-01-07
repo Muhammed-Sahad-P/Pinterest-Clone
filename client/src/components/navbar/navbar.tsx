@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
                         <span
                             className="text-md font-bold text-[#E60023] font-oxygen cursor-pointer"
                             onClick={() => {
-                                router.push("/home");
+                                router.push("/");
                             }}
                         >
                             Pinterest
