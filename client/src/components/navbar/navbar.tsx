@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
     const isDesktopMenuPage = ["/u/home", "/p/watch", "/p/explore", "/p/today", "/u/create", "/u/profile", "/u/settings"].includes(pathname) || pathname.startsWith("/pin");
 
     return (
-        <nav className="bg-white h-20 dark:bg-darkBg py-6 z-50 sticky top-0">
+        <nav className="bg-white h-20 dark:bg-darkBg py-4 z-50 sticky top-0">
             <div className="container mx-auto flex items-center justify-between px-4 md:px-6">
                 <div className="flex items-center space-x-4">
                     <Logo />
