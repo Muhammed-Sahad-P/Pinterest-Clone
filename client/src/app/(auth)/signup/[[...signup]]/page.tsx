@@ -114,7 +114,7 @@ export default function Signup() {
 
                 <div className="text-center flex-grow mt-5">
                     <Image
-                        src="/pinterest.png"
+                        src="/pinterest-color-svgrepo-com.svg"
                         alt="Pinterest Logo"
                         className="h-8 w-8 text-center mt-2 mx-auto mb-4"
                         width={32}
