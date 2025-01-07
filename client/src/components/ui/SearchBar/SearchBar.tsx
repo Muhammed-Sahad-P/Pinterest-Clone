@@ -6,11 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/store";
 import { setQuery } from "@/lib/store/features/searchSlice";
 import { search } from "@/lib/store/thunks/search-thunk";
+import Image from "next/image";
+import Link from "next/link";
+
 
 const SearchBar: React.FC = () => {
     const [query, setQueryState] = useState("");
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [recentSearches, setRecentSearches] = useState<string[]>([]);
+    const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(null);
     const searchBarRef = useRef<HTMLDivElement>(null);
 
     const dispatch = useDispatch<AppDispatch>();
@@ -18,18 +22,27 @@ const SearchBar: React.FC = () => {
     const { results, isLoading, error } = useSelector(
         (state: RootState) => state.search
     );
+    console.log(results, "search results");
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newQuery = e.target.value;
         setQueryState(newQuery);
-        dispatch(setQuery(newQuery));
 
-        if (newQuery.length > 0) {
-            setShowSuggestions(true);
-            dispatch(search({ query: newQuery }));
-        } else {
-            setShowSuggestions(false);
+        if (debounceTimeout) {
+            clearTimeout(debounceTimeout);
         }
+
+        const timeout = setTimeout(() => {
+            if (newQuery.length > 0) {
+                setShowSuggestions(true);
+                dispatch(setQuery(newQuery));
+                dispatch(search({ query: newQuery }));
+            } else {
+                setShowSuggestions(false);
+            }
+        }, 300);
+
+        setDebounceTimeout(timeout);
     };
 
     const handleClearSuggestions = () => {
@@ -68,6 +81,10 @@ const SearchBar: React.FC = () => {
             dispatch(search({ query }));
         }
     };
+
+    useEffect(() => {
+        console.log(results, "results");
+    }, [results])
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -118,7 +135,7 @@ const SearchBar: React.FC = () => {
                                             {searchQuery}
                                             <button
                                                 onClick={(e) => {
-                                                    e.stopPropagation(); // Prevent click event from being triggered
+                                                    e.stopPropagation();
                                                     handleClearRecentSearch(searchQuery);
                                                 }}
                                                 className="text-red-500 text-sm"
@@ -131,13 +148,21 @@ const SearchBar: React.FC = () => {
                             )}
 
                             {results?.length > 0 ? (
-                                results.map((result, index) => (
-                                    <li
-                                        key={index}
-                                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                    >
-                                        {result}
-                                    </li>
+                                results?.map((result, index) => (
+                                    <div key={index}>
+                                        <Link href={`/pin/${result._id}`}>
+                                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center space-x-4">
+                                                <Image
+                                                    src={result.imageUrl || "/default-pin-image.jpg"}
+                                                    alt={result.title || "No title available"}
+                                                    className="w-10 h-10 rounded-full object-cover"
+                                                    width={40}
+                                                    height={40}
+                                                />
+                                                <span>{result.title || "Untitled"}</span>
+                                            </li>
+                                        </Link>
+                                    </div>
                                 ))
                             ) : (
                                 <li className="px-4 py-2">No results found</li>

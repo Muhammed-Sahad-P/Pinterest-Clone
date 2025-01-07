@@ -1,8 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { search } from "@/lib/store/thunks/search-thunk";
+import { Pin } from "@/lib/types";
+
+interface SearchResult {
+  title: string;
+  _id: string;
+  imageUrl: string;
+  description: string;
+  pins: Pin[];
+}
 
 interface SearchState {
-  results: string[];
+  results: SearchResult[];
   isLoading: boolean;
   error: string | null;
   query: string;
@@ -31,14 +40,11 @@ const searchSlice = createSlice({
       })
       .addCase(search.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.results = action.payload.results || [];
+        state.results = action.payload.pins;
       })
       .addCase(search.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload
-          ? (action.payload as string)
-          : "An unknown error occurred.";
-        state.results = [];
+        state.error = action.payload as string;
       });
   },
 });

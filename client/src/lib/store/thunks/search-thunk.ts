@@ -12,7 +12,7 @@ export const search = createAsyncThunk(
   async ({ query }: SearchPayload, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(`/search?searchTerm=${query}`);
-      return response.data;
+      return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         const errorMessage =
