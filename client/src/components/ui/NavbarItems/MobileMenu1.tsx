@@ -12,14 +12,14 @@ const MobileMenu1: React.FC<MobileMenuProps> = ({
     onLoginClick,
     onSignupClick,
 }) => (
-    <div className="flex flex-col space-y-4 p-4">
-        <button className="text-gray-700 hover:text-red-500 font-medium">
+    <div className="flex flex-col p-2 items-center space-y-2 sm:hidden">
+        <button className="text-black hover:text-red-500 font-medium">
             About
         </button>
-        <button className="text-gray-700 hover:text-red-500 font-medium">
+        <button className="text-black hover:text-red-500 font-medium">
             Business
         </button>
-        <button className="text-gray-700 hover:text-red-500 font-medium">
+        <button className="text-black hover:text-red-500 font-medium mb-3">
             Blog
         </button>
         <AuthButtons onLoginClick={onLoginClick} onSignupClick={onSignupClick} />

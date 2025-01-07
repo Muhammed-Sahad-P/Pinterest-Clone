@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
 import Logo from "../ui/NavbarItems/Logo";
@@ -14,7 +14,7 @@ import LoginedItems from "../ui/NavbarItems/loginedItems";
 import MobileMenu1 from "../ui/NavbarItems/MobileMenu1";
 import DesktopPublicMenu from "../ui/NavbarItems/DesktopPublicMenu";
 import MobilePublicMenu from "../ui/NavbarItems/MobilePublicMenu";
-import { FcMenu } from "react-icons/fc";
+import { CgMenuMotion } from "react-icons/cg";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setIsLoginModalOpen, setIsSignupModalOpen } from "@/lib/store/features/userSlice";
 
@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
     const { isLoginModalOpen, isSignupModalOpen } = useAppSelector((state) => state.user);
 
     const dispatch = useAppDispatch();
-
+    const mobileMenuRef = useRef<HTMLDivElement>(null);
 
     const pathname = usePathname();
     const router = useRouter();
@@ -34,6 +34,22 @@ const Navbar: React.FC = () => {
         setIsLoggedIn(!!token);
     }, []);
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+                setIsMobileMenuOpen(false);
+            }
+        };
+
+        if (isMobileMenuOpen) {
+            document.addEventListener("click", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, [isMobileMenuOpen]);
+
     if (isLoggedIn === null) {
         return null;
     }
@@ -41,7 +57,7 @@ const Navbar: React.FC = () => {
     const isDesktopMenuPage = ["/u/home", "/p/watch", "/p/explore", "/p/today", "/u/create", "/u/profile", "/u/settings"].includes(pathname) || pathname.startsWith("/pin");
 
     return (
-        <nav className="bg-white dark:bg-darkBg py-6 z-50 sticky top-0">
+        <nav className="bg-white h-20 dark:bg-darkBg py-6 z-50 sticky top-0">
             <div className="container mx-auto flex items-center justify-between px-4 md:px-6">
                 <div className="flex items-center space-x-4">
                     <Logo />
@@ -87,32 +103,36 @@ const Navbar: React.FC = () => {
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         className="text-gray-700 md:hidden focus:outline-none hover:text-red-500"
                     >
-                        <FcMenu size={24} />
+                        <CgMenuMotion size={24} />
                     </button>
                 </div>
             </div>
 
-            {isMobileMenuOpen && (
-                isLoggedIn ? (
-                    <MobileMenu
-                        onSearchClick={() => { }}
-                        onLoginClick={() => dispatch(setIsLoginModalOpen(true))}
-                        onSignupClick={() => dispatch(setIsSignupModalOpen(true))}
-                    >
-                    </MobileMenu>
-                ) : (
-                    <>
-                        <MobilePublicMenu />
-                        <MobileMenu1
+            <div
+                className={`flex flex-col items-center md:hidden justify-end rounded-lg shadow-lg border mt-6 mr-0 bg-white ml-40 ${isMobileMenuOpen ? "block" : "hidden"}`}
+                ref={mobileMenuRef}
+            >
+                {isMobileMenuOpen && (
+                    isLoggedIn ? (
+                        <MobileMenu
                             onSearchClick={() => { }}
                             onLoginClick={() => dispatch(setIsLoginModalOpen(true))}
                             onSignupClick={() => dispatch(setIsSignupModalOpen(true))}
                         >
-                        </MobileMenu1>
-                    </>
-                )
-
-            )}
+                        </MobileMenu>
+                    ) : (
+                        <>
+                            <MobilePublicMenu />
+                            <MobileMenu1
+                                onSearchClick={() => { }}
+                                onLoginClick={() => dispatch(setIsLoginModalOpen(true))}
+                                onSignupClick={() => dispatch(setIsSignupModalOpen(true))}
+                            >
+                            </MobileMenu1>
+                        </>
+                    )
+                )}
+            </div>
             {isLoginModalOpen && <LoginModal onClose={() => dispatch(setIsLoginModalOpen(false))} />}
             {isSignupModalOpen && <SignupModal onClose={() => dispatch(setIsSignupModalOpen(false))} />}
         </nav>
@@ -120,4 +140,3 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
-

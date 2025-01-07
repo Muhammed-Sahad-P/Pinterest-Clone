@@ -7,13 +7,13 @@ const MobilePublicMenu = () => {
     const currentRoute = usePathname();
 
     return (
-        <div className="flex flex-col space-y-4 p-4 sm:hidden">
+        <div className="flex flex-col items-center space-y-2 p-2 sm:hidden">
             <Link
                 href="/p/today"
                 className={`${currentRoute === "/p/today"
                     ? "bg-black text-white"
                     : "text-black hover:text-red-500"
-                    } font-medium px-4 py-2 rounded-full`}
+                    } font-medium  rounded-full`}
             >
                 Today
             </Link>
@@ -23,7 +23,7 @@ const MobilePublicMenu = () => {
                 className={`${currentRoute === "/p/watch"
                     ? "bg-black text-white"
                     : "text-black hover:text-red-500"
-                    } font-medium px-4 py-2 rounded-full`}
+                    } font-medium  rounded-full`}
             >
                 Watch
             </Link>
@@ -33,7 +33,7 @@ const MobilePublicMenu = () => {
                 className={`${currentRoute === "/p/explore"
                     ? "bg-black text-white"
                     : "text-black hover:text-red-500"
-                    } font-medium px-4 py-2 rounded-full`}
+                    } font-medium  rounded-full`}
             >
                 Explore
             </Link>
