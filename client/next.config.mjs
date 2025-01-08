@@ -32,6 +32,11 @@ const nextConfig = {
         hostname: "your-cdn-or-api.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "helpx.adobe.com",
+        port: "",
+      },
     ],
   },
 };

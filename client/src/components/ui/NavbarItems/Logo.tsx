@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const Logo: React.FC = () => (
     <Link href="/">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 mt-1 sm:mt-0">
             <Image
                 src="/pinterest-color-svgrepo-com.svg"
                 alt="Pinterest Logo"

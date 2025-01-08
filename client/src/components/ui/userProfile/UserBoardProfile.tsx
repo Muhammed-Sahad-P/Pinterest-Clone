@@ -34,13 +34,20 @@ export default function UserBoardProfile() {
                                 <div className="relative w-full h-[150px] bg-white rounded-2xl overflow-hidden">
                                     <Image
                                         className="w-[186px] h-full object-cover"
-                                        src="/1.jpg"
+                                        src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg"
                                         alt="Board Image"
                                         width={150}
                                         height={100}
                                     />
-                                    <div className="bg-[#9b9b9b] opacity-50 w-[100px] h-[74px] absolute top-0 right-0"></div>
-                                    <div className="bg-[#9b9b9b] opacity-50 w-[100px] h-[74px] absolute bottom-0 right-0"></div>
+                                    <Image src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg"
+                                        alt="board img"
+                                        width={50}
+                                        height={50}
+                                        className="bg-[#9b9b9b] opacity-50 w-[100px] h-[74px] absolute top-0 right-0" />
+                                    <Image src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg"
+                                        alt="board img"
+                                        width={50}
+                                        height={50} className="bg-[#9b9b9b] opacity-50 w-[100px] h-[74px] absolute bottom-0 right-0" />
                                 </div>
                                 <h3 className="text-lg font-medium mt-2 ml-2">{board.name}</h3>
                                 <p className="text-black text-[12px] ml-3">{board?.pins?.length} Pin</p>

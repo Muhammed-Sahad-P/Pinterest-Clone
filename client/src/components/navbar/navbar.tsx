@@ -63,7 +63,7 @@ const Navbar: React.FC = () => {
                     <Logo />
                     {isLoggedIn ? null : (
                         <span
-                            className="text-md font-bold text-[#E60023] font-oxygen cursor-pointer"
+                            className="text-md font-bold text-[#E60023] mt-3 sm:mt-0 font-oxygen cursor-pointer"
                             onClick={() => {
                                 router.push("/");
                             }}
@@ -101,7 +101,7 @@ const Navbar: React.FC = () => {
 
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="text-gray-700 md:hidden focus:outline-none hover:text-red-500"
+                        className="text-gray-700 md:hidden focus:outline-none mt-1 sm:mt-0 hover:text-red-500"
                     >
                         <CgMenuMotion size={24} />
                     </button>
@@ -109,7 +109,7 @@ const Navbar: React.FC = () => {
             </div>
 
             <div
-                className={`flex flex-col items-center md:hidden justify-end rounded-lg shadow-lg border mt-6 mr-0 bg-white ml-40 ${isMobileMenuOpen ? "block" : "hidden"}`}
+                className={`flex flex-col items-center md:hidden justify-end rounded-lg shadow-lg border mr-0 bg-white ml-40 ${isMobileMenuOpen ? "block" : "hidden"}`}
                 ref={mobileMenuRef}
             >
                 {isMobileMenuOpen && (
