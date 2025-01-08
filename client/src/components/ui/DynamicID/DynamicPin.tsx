@@ -18,6 +18,7 @@ import { createComment, fetchComments, deleteComment } from "@/lib/store/thunks/
 import { FaUserCircle } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
 import Cookies from "js-cookie";
+import { CircularProgress } from "@mui/material";
 
 export default function DynamicPin() {
     const router = useRouter();
@@ -87,16 +88,33 @@ export default function DynamicPin() {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <CircularProgress size={60} color="primary" />
+            </div>
+        );
     }
 
     if (error) {
-        return <div>Error: {error}</div>;
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="text-red-600 text-xl font-medium">
+                    Error: {error}
+                </div>
+            </div>
+        );
     }
 
     if (!selectedPin) {
-        return <div>No pin found with ID</div>;
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="text-red-700 text-xl">
+                    No pin found with ID
+                </div>
+            </div>
+        );
     }
+
 
     const UserEmail = selectedPin.createdBy?.email?.split('@')[0];
     const firstLetter = UserEmail ? UserEmail.charAt(0).toUpperCase() : '';
@@ -182,7 +200,7 @@ export default function DynamicPin() {
                         {showComments && (
                             <div className="h-[300px] overflow-y-auto hide-scrollbar py-2 space-y-3">
                                 {isLoading ? (
-                                    <p>Loading comments...</p>
+                                    <p className="flex items-center justify-center"><CircularProgress size={20} color="primary" /></p>
                                 ) : comments.length === 0 ? (
                                     <p>No comments yet.</p>
                                 ) : (

@@ -8,6 +8,7 @@ import { setQuery } from "@/lib/store/features/searchSlice";
 import { search } from "@/lib/store/thunks/search-thunk";
 import Image from "next/image";
 import Link from "next/link";
+import { CircularProgress } from "@mui/material";
 
 
 const SearchBar: React.FC = () => {
@@ -113,7 +114,7 @@ const SearchBar: React.FC = () => {
             {showSuggestions && (
                 <div className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
                     {isLoading ? (
-                        <p className="px-4 py-2">Loading...</p>
+                        <p className="flex items-center justify-center px-4 py-2"><CircularProgress size={20} color="primary" /></p>
                     ) : error ? (
                         <p className="px-4 py-2 text-red-500">{error}</p>
                     ) : (

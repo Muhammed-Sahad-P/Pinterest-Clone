@@ -6,6 +6,7 @@ import { fetchPins } from "@/lib/store/thunks/pin-thunk";
 import { AppDispatch, RootState } from "@/lib/store";
 import { Pin } from "@/lib/types";
 import PinImag from "./PinImg";
+import Skeleton from "@mui/material/Skeleton";
 
 const UserHome = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -16,11 +17,19 @@ const UserHome = () => {
     }, [dispatch]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="masonry-layout p-3">
+                {[...Array(10)].map((_, index) => (
+                    <div key={index} className="skeleton-wrapper">
+                        <Skeleton variant="rectangular" width="100%" height={250} />
+                    </div>
+                ))}
+            </div>
+        );
     }
 
     if (error) {
-        return <div>Error: {error}</div>;
+        return <div className="text-red-500 text-center">Error: {error}</div>;
     }
 
     return (

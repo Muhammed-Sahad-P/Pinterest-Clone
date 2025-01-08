@@ -4,6 +4,7 @@ import { useFetchBoards } from "@/hooks/useFetchBoards";
 import Cookies from "js-cookie";
 import { Board } from "@/lib/types";
 import Image from "next/image";
+import { CircularProgress } from "@mui/material";
 
 export default function UserBoardProfile() {
     const { boards, loading, error } = useFetchBoards();
@@ -24,7 +25,7 @@ export default function UserBoardProfile() {
             <h1 className="text-2xl font-semibold mb-4">Your Boards</h1>
             <div className="flex flex-wrap">
                 {loading ? (
-                    <p className="text-gray-500">Loading boards...</p>
+                    <p className="flex items-center justify-center"><CircularProgress size={20} color="primary" /></p>
                 ) : error ? (
                     <p className="text-red-500">Failed to fetch boards: {error}</p>
                 ) : userBoards?.length > 0 ? (

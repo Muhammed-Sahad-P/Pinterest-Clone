@@ -45,7 +45,7 @@ const BoardSelect: React.FC<BoardSelectProps> = ({
             <label className="text-sm text-black md:text-base">Board</label>
 
             {loading ? (
-                <p className="text-sm text-black md:text-base">Loading boards...</p>
+                <p className="text-sm text-black md:text-base"></p>
             ) : (
                 <>
                     <Select onValueChange={(value) => onChange(value)} value={selectedBoard}>

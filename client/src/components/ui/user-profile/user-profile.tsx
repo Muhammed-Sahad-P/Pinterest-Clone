@@ -9,6 +9,7 @@ import UserPinProfile from '../userProfile/UserPinProfile';
 import UserBoardProfile from '../userProfile/UserBoardProfile';
 import Link from 'next/link';
 import Image from 'next/image';
+import { CircularProgress } from '@mui/material';
 
 export default function ProfilePage() {
     const dispatch = useDispatch<AppDispatch>();
@@ -24,7 +25,9 @@ export default function ProfilePage() {
     }, [dispatch, user]);
 
     if (!email) {
-        return <div className="text-center mt-10">Loading...</div>;
+        return <div className="text-center mt-10">
+            <p className="flex items-center justify-center"><CircularProgress size={20} color="primary" /></p>
+        </div>;
     }
 
     const emailName = email.split('@')[0];
