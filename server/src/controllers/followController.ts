@@ -107,4 +107,24 @@ const unfollowUser = async (req: CustomRequest, res: Response) => {
   );
 };
 
-export { followUser, unfollowUser };
+//user followers
+const userFollowers = async (req: CustomRequest, res: Response) => {
+  const { userId } = req.params;
+
+  const user = await userModel
+    .findById(userId)
+    .populate("followers", "email username");
+
+  if (!user) {
+    throw new CustomError("User not found", 404);
+  }
+
+  res.status(200).json(
+    new StandardResponse("Followers fetched successfully", {
+      followers: user.followers,
+      following: user.following,
+    })
+  );
+};
+
+export { followUser, unfollowUser, userFollowers };
