@@ -5,8 +5,6 @@ import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/store";
 import { fetchPinById } from "@/lib/store/thunks/pin-thunk";
 import Image from "next/image";
-import { SlOptions } from "react-icons/sl";
-import { MdOutlineFileUpload } from "react-icons/md";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import ActionButton from "../user-home/ActionButton";
@@ -16,9 +14,12 @@ import { useAppSelector } from "@/lib/store/hooks";
 import { likeUnlikePin } from "@/lib/store/thunks/like-thunk";
 import { createComment, fetchComments, deleteComment } from "@/lib/store/thunks/comment-thunk";
 import { FaUserCircle } from "react-icons/fa";
+import { FaLink } from "react-icons/fa6";
+import { HiDownload } from "react-icons/hi";
 import EmojiPicker from "emoji-picker-react";
 import Cookies from "js-cookie";
 import { CircularProgress } from "@mui/material";
+import { toast } from "sonner";
 
 export default function DynamicPin() {
     const router = useRouter();
@@ -82,6 +83,26 @@ export default function DynamicPin() {
         }
     };
 
+    const handleCopyLink = () => {
+        navigator.clipboard.writeText(selectedPin?.imageUrl || "");
+        toast.success("Link copied to clipboard");
+    }
+
+    const handleDownloadImage = async () => {
+        const response = await fetch(selectedPin?.imageUrl || "");
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `pin-${selectedPin?._id}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+    };
+
+
     const handleEmojiClick = (emojiObject: { emoji: string }) => {
         setComment((prevComment) => prevComment + emojiObject.emoji);
         setShowEmojiPicker(false);
@@ -90,7 +111,7 @@ export default function DynamicPin() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <CircularProgress size={60} color="primary" />
+                <CircularProgress size={40} color="primary" />
             </div>
         );
     }
@@ -108,8 +129,8 @@ export default function DynamicPin() {
     if (!selectedPin) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="text-red-700 text-xl">
-                    No pin found with ID
+                <div className="text-gray-600 text-sm">
+                    <CircularProgress size={20} color="primary" />
                 </div>
             </div>
         );
@@ -153,14 +174,14 @@ export default function DynamicPin() {
                                     onClick={handleLike}
                                 />
                                 <span className="text-black mt-1">{likeCount}</span>
-                                <ActionButton
+                                <FaLink
+                                    onClick={handleCopyLink}
                                     className="text-[25px]"
-                                    icon={MdOutlineFileUpload}
                                     title="Share"
                                 />
-                                <ActionButton
+                                <HiDownload
+                                    onClick={handleDownloadImage}
                                     className="text-[25px]"
-                                    icon={SlOptions}
                                     title="Download Image"
                                 />
                             </div>

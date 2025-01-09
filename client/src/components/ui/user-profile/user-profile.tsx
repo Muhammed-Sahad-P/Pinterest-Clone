@@ -27,7 +27,7 @@ export default function ProfilePage() {
 
     if (!email) {
         return <div className="text-center mt-10">
-            <p className="flex items-center justify-center"><CircularProgress size={20} color="primary" /></p>
+            <p className="flex items-center justify-center h-screen"><CircularProgress size={20} color="primary" /></p>
         </div>;
     }
 

@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 export default function UserPinCreated() {
     const dispatch = useDispatch<AppDispatch>();
-    const { loading, pins, error } = useAppSelector((state: RootState) => state.pin);
+    const { loading, pins } = useAppSelector((state: RootState) => state.pin);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pinToDelete, setPinToDelete] = useState<string | null>(null);
 
@@ -72,12 +72,6 @@ export default function UserPinCreated() {
                             />
                         ))}
                 </div>
-            )}
-
-            {error && (
-                <p className="text-red-500">
-                    Error: {typeof error === "object" ? JSON.stringify(error) : error}
-                </p>
             )}
 
             {!loading && pins && pins.length === 0 && (

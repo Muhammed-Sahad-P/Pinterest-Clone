@@ -91,7 +91,6 @@ export const fetchPinsByUserId = createAsyncThunk(
   async (userId: string, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(`/pins/users/${userId}`);
-      console.log(response.data.data, "response.data.data");
       return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError) {
