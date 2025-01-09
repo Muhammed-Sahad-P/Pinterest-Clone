@@ -115,6 +115,21 @@ const updatePin = async (req: CustomRequest, res: Response) => {
     .json(new StandardResponse("Pin updated successfully", updatePin));
 };
 
+//get all pins by user id
+const getPinsByUserId = async (req: CustomRequest, res: Response) => {
+  const { userId } = req.params;
+
+  const pins = await pinModel
+    .find({ createdBy: userId })
+    .populate("createdBy", "username email");
+
+  if (!pins) {
+    throw new CustomError("Pins not found", 404);
+  }
+
+  res.status(200).json(new StandardResponse("Pins fetched successfully", pins));
+};
+
 // Delete Pin by ID
 const deletePinById = async (req: CustomRequest, res: Response) => {
   const { id } = req.params;
@@ -133,4 +148,12 @@ const deletePinById = async (req: CustomRequest, res: Response) => {
   res.status(200).json(new StandardResponse("Pin deleted successfully", null));
 };
 
-export { createPin, getAllPins, getPinById, updatePin, deletePinById, upload };
+export {
+  createPin,
+  getAllPins,
+  getPinById,
+  updatePin,
+  getPinsByUserId,
+  deletePinById,
+  upload,
+};

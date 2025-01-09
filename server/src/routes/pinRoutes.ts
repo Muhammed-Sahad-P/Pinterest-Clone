@@ -3,6 +3,7 @@ import {
   createPin,
   getAllPins,
   getPinById,
+  getPinsByUserId,
   deletePinById,
   upload,
   updatePin,
@@ -16,6 +17,7 @@ router.post("/", verifyToken, upload.single("image"), errorCatch(createPin));
 router.get("/", verifyToken, errorCatch(getAllPins));
 router.get("/:id", verifyToken, errorCatch(getPinById));
 router.patch("/:id", verifyToken, errorCatch(updatePin));
+router.get("/users/:userId", verifyToken, errorCatch(getPinsByUserId));
 router.delete("/:id", verifyToken, errorCatch(deletePinById));
 
 export default router;
