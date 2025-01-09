@@ -4,6 +4,8 @@ import axiosInstance from "@/utils/axios";
 
 interface FollowPayload {
   followUserId: string;
+  userId: string;
+  followEmail: string;
 }
 //follow a user
 export const followUser = createAsyncThunk(
@@ -36,6 +38,24 @@ export const unfollowUser = createAsyncThunk(
       if (error instanceof AxiosError) {
         return rejectWithValue({
           message: error.response?.data.message || "Failed to unfollow user",
+        });
+      }
+      return rejectWithValue({ message: "An unknown error occurred" });
+    }
+  }
+);
+
+//fetch followed users and followers
+export const fetchFollowers = createAsyncThunk(
+  "user/fetchFollowers",
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/users/followers/${userId}`);
+      return response.data.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue({
+          message: error.response?.data.message || "Failed to fetch followers",
         });
       }
       return rejectWithValue({ message: "An unknown error occurred" });

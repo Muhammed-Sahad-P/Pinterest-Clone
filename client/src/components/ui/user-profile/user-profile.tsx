@@ -16,7 +16,7 @@ export default function ProfilePage() {
     const dispatch = useDispatch<AppDispatch>();
 
     const user = useAppSelector((state: RootState) => state.user.userProfile);
-    const { email, following } = user || {};
+    const { email, following, followers } = user || {};
     const [activeTab, setActiveTab] = useState<'activity' | 'pins' | 'boards' | 'userPins'>('pins');
 
     useEffect(() => {
@@ -60,7 +60,8 @@ export default function ProfilePage() {
                     <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 text-center sm:text-left">
                         <div>
                             <p className="font-semibold text-lg sm:text-xl">{emailName}</p>
-                            <p className="text-black text-sm sm:text-base">{following?.length || 0} following</p>
+                            <p className="text-black text-sm">{following?.length || 0} following</p>
+                            <p className="text-black text-sm">{followers?.length || 0} followers</p>
                         </div>
                         <Link href="/u/settings">
                             <button

@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { followUser, unfollowUser } from "../thunks/follow-thunk";
+import {
+  followUser,
+  unfollowUser,
+  fetchFollowers,
+} from "../thunks/follow-thunk";
 
 interface FollowState {
   following: string[];
@@ -40,6 +44,17 @@ const followSlice = createSlice({
         );
       })
       .addCase(unfollowUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchFollowers.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchFollowers.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.following = action.payload;
+      })
+      .addCase(fetchFollowers.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });

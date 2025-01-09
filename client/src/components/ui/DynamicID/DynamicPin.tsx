@@ -13,6 +13,7 @@ import { useSavePin } from "@/hooks/useSavePin";
 import { useAppSelector } from "@/lib/store/hooks";
 import { likeUnlikePin } from "@/lib/store/thunks/like-thunk";
 import { createComment, fetchComments, deleteComment } from "@/lib/store/thunks/comment-thunk";
+import { followUser, unfollowUser } from "@/lib/store/thunks/follow-thunk";
 import { FaUserCircle } from "react-icons/fa";
 import { FaLink } from "react-icons/fa6";
 import { HiDownload } from "react-icons/hi";
@@ -30,9 +31,14 @@ export default function DynamicPin() {
     const { pinId } = useParams<{ pinId: string }>();
     const [likeCount, setLikeCount] = useState<number>(0);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false);
 
     const { selectedPin, loading, error } = useAppSelector((state: RootState) => state.pin);
     const { comments, isLoading } = useAppSelector((state: RootState) => state.comment);
+    const { following } = useAppSelector((state: RootState) => state.follow);
+
+    const userId = Cookies.get("user");
+    const user = JSON.parse(userId || "");
 
     useEffect(() => {
         if (pinId) {
@@ -47,9 +53,34 @@ export default function DynamicPin() {
         }
     }, [selectedPin]);
 
+    useEffect(() => {
+        if (selectedPin?.createdBy?.email) {
+            setIsFollowing(following.includes(selectedPin.createdBy.email));
+        }
+    }, [selectedPin, following]);
+
+    const handleFollow = async () => {
+        if (selectedPin?.createdBy?.email) {
+            try {
+                if (isFollowing) {
+                    await dispatch(unfollowUser({ userId: user._id, followUserId: selectedPin.createdBy._id, followEmail: selectedPin.createdBy.email })); setIsFollowing(false);
+                } else {
+                    await dispatch(followUser({ userId: user._id, followUserId: selectedPin.createdBy._id, followEmail: selectedPin.createdBy.email }));
+                    setIsFollowing(true);
+                }
+            } catch (error) {
+                console.error("Failed to follow/unfollow:", error);
+            }
+        }
+    };
+
+    const isOwnProfile = selectedPin?.createdBy?.email === user?.email;
+
     const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setComment(e.target.value);
     };
+
+
 
     const handlePostComment = async () => {
         if (comment.trim() && pinId) {
@@ -140,8 +171,6 @@ export default function DynamicPin() {
     const UserEmail = selectedPin.createdBy?.email?.split('@')[0];
     const firstLetter = UserEmail ? UserEmail.charAt(0).toUpperCase() : '';
 
-    const userId = Cookies.get("user");
-    const user = JSON.parse(userId || "");
 
     return (
         <div className="flex items-center justify-center bg-white p-6">
@@ -202,6 +231,14 @@ export default function DynamicPin() {
                                 </span>
                             </div>
                             <p className="text-black">{selectedPin.createdBy?.email}</p>
+                            {!isOwnProfile && (
+                                <button
+                                    onClick={handleFollow}
+                                    className="bg-[#E9E9E9] text-black text-sm py-2 px-3 rounded-full"
+                                >
+                                    {isFollowing ? "Unfollow" : "Follow"}
+                                </button>
+                            )}
                         </div>
                         <div className="flex items-center mt-6 mb-2 justify-between">
                             <h2 className="font-semibold text-md ml-1"><span>{comments.length}  </span>Comment</h2>
