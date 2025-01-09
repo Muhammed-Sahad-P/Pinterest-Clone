@@ -10,13 +10,14 @@ import UserBoardProfile from '../userProfile/UserBoardProfile';
 import Link from 'next/link';
 import Image from 'next/image';
 import { CircularProgress } from '@mui/material';
+import UserPinCreated from '../userProfile/UserPinCreated';
 
 export default function ProfilePage() {
     const dispatch = useDispatch<AppDispatch>();
 
     const user = useAppSelector((state: RootState) => state.user.userProfile);
     const { email, following } = user || {};
-    const [activeTab, setActiveTab] = useState<'activity' | 'pins' | 'boards'>('pins');
+    const [activeTab, setActiveTab] = useState<'activity' | 'pins' | 'boards' | 'userPins'>('pins');
 
     useEffect(() => {
         if (!user) {
@@ -76,7 +77,7 @@ export default function ProfilePage() {
                     onClick={() => setActiveTab('pins')}
                     className={`pb-2 ${activeTab === 'pins' ? 'border-b-2 border-black' : 'border-b-2 border-transparent'}`}
                 >
-                    Pins
+                    Saved
                 </button>
                 <button
                     onClick={() => setActiveTab('boards')}
@@ -84,9 +85,15 @@ export default function ProfilePage() {
                 >
                     Boards
                 </button>
+                <button
+                    onClick={() => setActiveTab('userPins')}
+                    className={`pb-2 ${activeTab === 'userPins' ? 'border-b-2 border-black' : 'border-b-2 border-transparent'}`}
+                >
+                    Pins
+                </button>
             </div>
             <div className="tab-content mt-6">
-                {activeTab === "pins" ? <UserPinProfile /> : activeTab === "boards" ? <UserBoardProfile /> : <div>Activity content goes here</div>}
+                {activeTab === "pins" ? <UserPinProfile /> : activeTab === "boards" ? <UserBoardProfile /> : activeTab === "userPins" ? <UserPinCreated /> : <div>Activity content goes here</div>}
             </div>
         </div>
     );

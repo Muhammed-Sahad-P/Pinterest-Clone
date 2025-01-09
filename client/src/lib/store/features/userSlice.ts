@@ -14,6 +14,7 @@ import {
 import { User } from "@/types/user";
 
 interface UserProfile {
+  user?: string;
   _id?: string;
   email: string;
   username?: string;

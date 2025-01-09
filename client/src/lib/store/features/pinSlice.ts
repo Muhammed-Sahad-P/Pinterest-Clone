@@ -3,6 +3,7 @@ import {
   createPin,
   deletePinById,
   fetchPinById,
+  fetchPinsByUserId,
   fetchPins,
   updatePin,
 } from "../thunks/pin-thunk";
@@ -93,13 +94,29 @@ const pinSlice = createSlice({
         state.loading = false;
         state.error = (action.payload as { message: string })?.message || null;
       })
+      .addCase(fetchPinsByUserId.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPinsByUserId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.pins = action.payload;
+      })
+      .addCase(fetchPinsByUserId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
       .addCase(deletePinById.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(deletePinById.fulfilled, (state, action) => {
         state.loading = false;
-        state.pins = state.pins.filter((pin) => pin !== action.payload._id);
+        if (action.payload) {
+          state.pins = state.pins.filter(
+            (pin) => pin._id !== action.payload._id
+          );
+        }
       })
       .addCase(deletePinById.rejected, (state, action) => {
         state.loading = false;

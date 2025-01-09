@@ -85,6 +85,25 @@ export const updatePin = createAsyncThunk(
   }
 );
 
+//get all pins by user id
+export const fetchPinsByUserId = createAsyncThunk(
+  "pin/fetchPinsByUserId",
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/pins/users/${userId}`);
+      console.log(response.data.data, "response.data.data");
+      return response.data.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue({
+          message: error.response?.data.message || "Failed to Fetch pins",
+        });
+      }
+      return rejectWithValue({ message: "An unknown error occurred" });
+    }
+  }
+);
+
 //delete pin by id
 export const deletePinById = createAsyncThunk(
   "pin/deletePinById",
