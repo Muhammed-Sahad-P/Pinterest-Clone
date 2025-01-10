@@ -19,7 +19,6 @@ export default function UserPinCreated() {
         const parsedUser = user ? JSON.parse(user) : null;
 
         if (parsedUser && parsedUser.id) {
-            console.log("User ID:", parsedUser.id);
             dispatch(fetchPinsByUserId(parsedUser.id));
         } else {
             console.error("Invalid or missing user ID in cookies");
@@ -74,7 +73,7 @@ export default function UserPinCreated() {
                 </div>
             )}
 
-            {!loading && pins && pins.length === 0 && (
+            {!loading && pins && pins?.length === 0 && (
                 <p className="text-center text-gray-500">No pins found.</p>
             )}
 
@@ -86,10 +85,10 @@ export default function UserPinCreated() {
                     >
                         <div className="relative w-full h-full bg-white rounded-lg shadow-lg overflow-hidden">
                             {pin?.imageUrl && (
-                                <a href={`/pin/${pin._id}`}>
+                                <a href={`/pin/${pin?._id}`}>
                                     <Image
                                         className="w-full h-full object-cover"
-                                        src={pin.imageUrl}
+                                        src={pin?.imageUrl}
                                         alt="Pin"
                                         width={300}
                                         height={300}
