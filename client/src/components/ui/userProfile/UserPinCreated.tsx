@@ -4,26 +4,21 @@ import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/store";
 import { fetchPinsByUserId, deletePinById } from "@/lib/store/thunks/pin-thunk";
 import { useAppSelector } from "@/lib/store/hooks";
-import Cookies from "js-cookie";
 import { Skeleton } from "@mui/material";
 import { toast } from "sonner";
 
 export default function UserPinCreated() {
     const dispatch = useDispatch<AppDispatch>();
     const { loading, pins } = useAppSelector((state: RootState) => state.pin);
+    const user = useAppSelector((state: RootState) => state.user.userProfile);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pinToDelete, setPinToDelete] = useState<string | null>(null);
 
     useEffect(() => {
-        const user = Cookies.get("user");
-        const parsedUser = user ? JSON.parse(user) : null;
-
-        if (parsedUser && parsedUser.id) {
-            dispatch(fetchPinsByUserId(parsedUser.id));
-        } else {
-            console.error("Invalid or missing user ID in cookies");
+        if (user?._id) {
+            dispatch(fetchPinsByUserId(user?._id));
         }
-    }, [dispatch]);
+    }, [dispatch, user?._id])
 
     const handleDelete = async () => {
         if (!pinToDelete) {
