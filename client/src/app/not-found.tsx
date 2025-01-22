@@ -9,7 +9,7 @@ const NotFoundPage = () => {
                     404
                 </h1>
                 <p className="mt-4 text-lg md:text-2xl font-semibold text-gray-600 dark:text-gray-400">
-                    Oops! The page you're looking for doesn't exist.
+                    Oops! The page you&apos;re looking for doesn&apos;t exist.
                 </p>
                 <p className="mt-2 text-gray-500 dark:text-gray-400">
                     It might have been removed or is temporarily unavailable.
