@@ -14,6 +14,7 @@ import followRoutes from "./routes/followRoutes";
 import categoryRoutes from "./routes/categoryRoutes";
 import searchRoutes from "./routes/searchRoutes";
 import adminRoutes from "./routes/admin/adminRoutes";
+import { CustomError } from "./utils/error/customError";
 
 dotenv.config();
 
@@ -38,6 +39,10 @@ app.use("/api/profile", userRoutes);
 app.use("/api/users", followRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/search", searchRoutes);
+
+app.use("*", (req, _res, next) => {
+  next(new CustomError(`Cannot ${req.method} ${req.originalUrl}`, 404));
+});
 
 app.use(globalErrorHandler);
 
