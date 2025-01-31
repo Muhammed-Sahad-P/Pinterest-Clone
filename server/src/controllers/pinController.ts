@@ -7,7 +7,7 @@ import { CustomError } from "../utils/error/customError";
 import { StandardResponse } from "../utils/standardResponse";
 import { CustomRequest } from "../types/interfaces";
 import cloudinary from "../utils/cloudinary";
-import { model } from "mongoose";
+import { io } from "../index";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -64,6 +64,12 @@ const createPin = async (req: CustomRequest, res: Response) => {
 
   board.pins.push(pin._id);
   await board.save();
+
+  io.emit("newPin", {
+    message: `📌 New Pin Alert! "${title}" has just been added. Check it out now! 🚀`,
+    pin,
+    timeStamp: new Date(),
+  });
 
   res.status(201).json(new StandardResponse("Pin created successfully", pin));
 };

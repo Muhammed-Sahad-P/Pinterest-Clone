@@ -15,18 +15,28 @@ import categoryRoutes from "./routes/categoryRoutes";
 import searchRoutes from "./routes/searchRoutes";
 import adminRoutes from "./routes/admin/adminRoutes";
 import { CustomError } from "./utils/error/customError";
+import { Server } from "socket.io";
+import http from "http";
 
 dotenv.config();
 
 const port = process.env.PORT || 5000;
 const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  },
+});
+
+app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 
 app.get("/", (_req, res) => {
   res.send("Hello world!");
 });
-
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
@@ -46,8 +56,18 @@ app.use("*", (req, _res, next) => {
 
 app.use(globalErrorHandler);
 
+io.on("connection", (socket) => {
+  console.log("A user connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
+
 connectDB();
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+export { io };
