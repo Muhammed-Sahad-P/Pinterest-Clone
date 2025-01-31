@@ -11,12 +11,14 @@ import { AppDispatch } from "@/lib/store";
 import { saveUnsavePin } from "@/lib/store/thunks/save-thunk";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface PinImageWithButtonsProps {
     pin: Pin;
 }
 
 const PinImag: React.FC<PinImageWithButtonsProps> = ({ pin }) => {
+    const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isSharePopupOpen, setIsSharePopupOpen] = useState(false);
@@ -64,6 +66,7 @@ const PinImag: React.FC<PinImageWithButtonsProps> = ({ pin }) => {
                 </Link>
                 <div className="absolute top-4 left-2 group-hover:block hidden">
                     <ActionButton
+                        onClick={() => router.push('/u/profile')}
                         className="bg-transparent text-white px-3 py-2 rounded-full text-sm sm:text-base flex items-center hover:bg-[#665b5b] hover:bg-opacity-40 hover:backdrop-blur-none"
                         icon={MdKeyboardArrowDown}
                     >
