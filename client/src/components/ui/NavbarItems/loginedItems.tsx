@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { IoNotifications } from "react-icons/io5";
 import { LuMessageCircleMore } from "react-icons/lu";
 import { NavDropdown } from "./NavDropdown";
@@ -14,6 +14,7 @@ interface Notification {
 const LoginedItems: React.FC = () => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [showNotifications, setShowNotifications] = useState(false);
+    const notificationRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         socket.on("newPin", (notification) => {
@@ -25,6 +26,20 @@ const LoginedItems: React.FC = () => {
 
         return () => {
             socket.off("newPin");
+        };
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
+                setShowNotifications(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
 
@@ -41,6 +56,13 @@ const LoginedItems: React.FC = () => {
         }
     };
 
+    const handleCloseNotification = () => {
+        setShowNotifications(false);
+        setNotifications((prevNotifications) =>
+            prevNotifications.filter((notif) => !notif.read)
+        );
+    };
+
     const hasUnreadNotifications = notifications.some((notif) => !notif.read);
 
     return (
@@ -55,11 +77,15 @@ const LoginedItems: React.FC = () => {
                     <span className="absolute top-0 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                 )}
             </button>
+
             {showNotifications && (
-                <div className="absolute right-0 mt-40 w-60 bg-white shadow-xl rounded-md p-4 z-10 max-h-[300px] overflow-y-auto">
+                <div
+                    ref={notificationRef}
+                    className="absolute right-0 mt-40 w-60 bg-white shadow-xl rounded-md p-4 z-10 max-h-[300px] overflow-y-auto"
+                >
                     <button
                         className="absolute top-1 right-2 p-1 text-black"
-                        onClick={() => setShowNotifications(false)}
+                        onClick={handleCloseNotification}
                     >
                         <IoMdClose />
                     </button>
@@ -77,9 +103,6 @@ const LoginedItems: React.FC = () => {
                                         }`}
                                 >
                                     <p className="text-sm">{notification.message}</p>
-                                    <span className="text-xs text-gray-400">
-                                        {new Date(notification.createdAt).toLocaleString()}
-                                    </span>
                                 </li>
                             ))
                         )}
