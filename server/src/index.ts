@@ -17,12 +17,15 @@ import adminRoutes from "./routes/admin/adminRoutes";
 import { CustomError } from "./utils/error/customError";
 import { Server } from "socket.io";
 import http from "http";
+import startCronJob from "./jobs/cronJob";
 
 dotenv.config();
 
 const port = process.env.PORT || 5000;
 const app = express();
 const server = http.createServer(app);
+
+startCronJob(); // Start the cron job for pinging (keep-alive) the server
 
 const io = new Server(server, {
   cors: {
