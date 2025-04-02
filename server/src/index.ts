@@ -18,6 +18,8 @@ import { CustomError } from "./utils/error/customError";
 import { Server } from "socket.io";
 import http from "http";
 import startCronJob from "./jobs/cronJob";
+import { setupScopeoConfig } from "./config/scopeoConfig";
+import initializeScopeo, { scopeoErrorHandler } from "scopeo";
 
 dotenv.config();
 
@@ -25,6 +27,8 @@ const port = process.env.PORT || 5000;
 const app = express();
 const server = http.createServer(app);
 
+setupScopeoConfig(); // Initialize Scopeo configuration
+initializeScopeo(app);
 startCronJob(); // Start the cron job for pinging (keep-alive) the server
 
 const io = new Server(server, {
@@ -57,8 +61,6 @@ app.use("*", (req, _res, next) => {
   next(new CustomError(`Cannot ${req.method} ${req.originalUrl}`, 404));
 });
 
-app.use(globalErrorHandler);
-
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
@@ -69,6 +71,7 @@ io.on("connection", (socket) => {
 
 connectDB();
 
+scopeoErrorHandler(app);
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
