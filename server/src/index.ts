@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db";
-import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import authRoutes from "./routes/authRoutes";
 import boardRoutes from "./routes/boardRoutes";
 import pinRoutes from "./routes/pinRoutes";
