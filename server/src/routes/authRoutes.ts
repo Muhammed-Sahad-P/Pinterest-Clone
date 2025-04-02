@@ -7,9 +7,10 @@ import {
   resetPassword,
 } from "../controllers/authController";
 import { errorCatch } from "../utils/error/errorCatch";
+import { accessMonitor } from "scopeo";
 
 const router = express.Router();
-
+router.use(accessMonitor);
 router.post("/register", errorCatch(register));
 router.post("/login", errorCatch(login));
 router.post("/googlelogin", errorCatch(googleLogin));
